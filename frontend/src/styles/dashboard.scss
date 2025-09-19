@@ -1,0 +1,216 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+.dashboard {
+  min-height: 100vh;
+
+  &.admin {
+    background-color: color.mix($secondary-color, $white, 8%);
+  }
+
+  &.user {
+    background-color: color.mix($primary-color, $white, 8%);
+  }
+}
+
+.dashboard-header {
+  background-color: $white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .header-content {
+    @include flex-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+
+    @include responsive(tablet) {
+      padding: 1.5rem 1.5rem;
+    }
+
+    @include responsive(desktop) {
+      padding: 1.5rem 2rem;
+    }
+
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: $gray-900;
+    }
+
+    .user-info {
+      @include flex-center;
+      gap: 1rem;
+
+      .user-name {
+        font-size: 0.875rem;
+        color: $gray-600;
+
+        strong {
+          color: $gray-800;
+        }
+      }
+
+      .logout-button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &.admin {
+          @include button($secondary-color, $secondary-dark);
+        }
+
+        &.user {
+          @include button($primary-color, $primary-dark);
+        }
+      }
+    }
+  }
+}
+
+.dashboard-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+
+  @include responsive(tablet) {
+    padding: 1.5rem 1.5rem;
+  }
+
+  @include responsive(desktop) {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+
+  @include responsive(tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include responsive(desktop) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dashboard-card {
+  @include card;
+  
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $gray-900;
+    margin-bottom: 1rem;
+  }
+
+  .card-content {
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: $gray-600;
+
+        strong {
+          color: $gray-800;
+        }
+      }
+    }
+
+    .action-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      button {
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 0.875rem;
+
+        &.admin {
+          background-color: color.mix($secondary-color, $white, 15%);
+          color: color.adjust($secondary-color, $lightness: 15%);
+
+          &:hover {
+            background-color: color.mix($secondary-color, $white, 25%);
+          }
+        }
+
+        &.user {
+          background-color: color.mix($primary-color, $white, 15%);
+          color: color.adjust($primary-color, $lightness: 15%);
+
+          &:hover {
+            background-color: color.mix($primary-color, $white, 25%);
+          }
+        }
+      }
+    }
+  }
+}
+
+.debug-section {
+  margin-top: 2rem;
+  background-color: $gray-100;
+  padding: 1.5rem;
+  border-radius: 8px;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin-bottom: 1rem;
+  }
+
+  .debug-info {
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: $gray-600;
+
+        strong {
+          color: $gray-800;
+        }
+      }
+    }
+  }
+}
+
+.loading-screen {
+  @include flex-center;
+  min-height: 100vh;
+
+  .loading-text {
+    font-size: 1.125rem;
+
+    &.admin {
+      color: $secondary-color;
+    }
+
+    &.user {
+      color: $primary-color;
+    }
+  }
+}

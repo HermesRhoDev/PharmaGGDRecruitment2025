@@ -1,0 +1,6 @@
+!frontend/.gitignore
+!backend/.gitignore
+/.idea/
+.next/
+*.cache
+.DS_Store

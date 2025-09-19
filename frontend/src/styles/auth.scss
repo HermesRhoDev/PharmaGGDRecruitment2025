@@ -1,0 +1,138 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+.login-page {
+  @include flex-center;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+
+  &.admin {
+    background-color: color.mix($secondary-color, $white, 10%);
+  }
+
+  &.user {
+    background-color: color.mix($primary-color, $white, 10%);
+  }
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+
+    &.admin {
+      color: $secondary-color;
+    }
+
+    &.user {
+      color: $primary-color;
+    }
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: $gray-600;
+  }
+}
+
+.login-form {
+  @include card;
+  
+  .error-message {
+    background-color: color.mix($secondary-color, $white, 10%);
+    border: 1px solid color.mix($secondary-color, $white, 30%);
+    color: color.adjust($secondary-color, $lightness: 10%);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $gray-700;
+      margin-bottom: 0.25rem;
+    }
+
+    input {
+      @include input;
+
+      &.admin:focus {
+        border-color: $secondary-color;
+        box-shadow: 0 0 0 3px rgba($secondary-color, 0.1);
+      }
+
+      &.user:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      }
+    }
+  }
+
+  .submit-button {
+    width: 100%;
+    @include flex-center;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 1rem;
+
+    &.admin {
+      @include button($secondary-color, $secondary-dark);
+    }
+
+    &.user {
+      @include button($primary-color, $primary-dark);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  .back-link {
+    text-align: center;
+    
+    a {
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &.admin {
+        color: $secondary-color;
+        
+        &:hover {
+          color: $secondary-dark;
+        }
+      }
+
+      &.user {
+        color: $primary-color;
+        
+        &:hover {
+          color: $primary-dark;
+        }
+      }
+    }
+  }
+}
