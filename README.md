@@ -1,5 +1,5 @@
 ## Introduction :
-Ce repo a pour but de tester vos connaissances et compétences dans un environnement Laravel/NextJS. Nous vous fournissons une base de travail avec une séparation entre interface admin et interface public, ainsi que les logique de connexion, gestion de rôle et de permission. Un seed prêt à l'emploi vous permettra de mettre en place votre base de données.
+Ce repo a pour but de tester vos connaissances et compétences dans un environnement Laravel/NextJS. Nous vous fournissons une base de travail avec une séparation entre interface admin et interface public, ainsi que les logique de connexion. Un seed prêt à l'emploi vous permettra de mettre en place votre base de données.
 
 ## Prérequis : 
 - Node 23.6.0
@@ -12,13 +12,11 @@ Ce repo a pour but de tester vos connaissances et compétences dans un environne
 - Dans le dossier frontend, exécutez les commandes suivantes : ```npm install && npm run dev```
 
 ## À Faire :
+- Mettre en place un model produit
 - Créer une interface pour la création de produits côté admin
-- Donner l'accès au catalogue pour le modifier
-- Ne donner la possibilité de changer le prix qu'aux administrateurs d'après les permissions
-- Donner la possibilité de modifier un produit au personne ayant le role Catalogue et Administrateur
-- Créer un listing de produit avec pagination côté FrontOffice
-- Créer un panier fonctionnel et optimisé
+- Créer un listing de produit côté admin avec possibilité de créer / modifier / suprimer un produit
+- Créer des listings de produit côté client avec pagination et recherche textuelle
 - Créer une documentation claire du travail rendu, avec spécifications techniques et explications des composants etc...
 
 Créé le 19/09/2025 par Hugo
-Mis à jour le 19/09/2025 par Tanguy
+Mis à jour le 30/09/2025 par Tanguy
