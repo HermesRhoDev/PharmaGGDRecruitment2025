@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,4 +61,9 @@ Route::middleware(['auth:sanctum', 'role.admin'])->group(function () {
             'admin' => auth()->user()->load('role')
         ]);
     });
+});
+
+// Admin CRUD routes for products
+Route::middleware(['auth:sanctum', 'role.admin'])->prefix('admin')->group(function () {
+    Route::apiResource('products', ProductController::class);
 });

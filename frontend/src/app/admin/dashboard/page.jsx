@@ -1,6 +1,7 @@
 "use client"
 
 import { adminLogout } from "App/server/adminAuth"
+import Link from 'next/link'
 import 'App/styles/dashboard.scss'
 
 export default function AdminDashboard() {
@@ -17,6 +18,11 @@ export default function AdminDashboard() {
 					<h1 className="dashboard-title">
 						Dashboard Administrateur
 					</h1>
+					<div className="dashboard-products-section">
+						<Link href="/admin/dashboard/products">
+							Produits
+						</Link>
+					</div>
 					<div className="dashboard-user-section">
 						<button
 							onClick={handleLogout}
