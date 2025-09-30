@@ -28,7 +28,15 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request): JsonResponse
     {
-        $product = Product::create($request->validated());
+        $validatedData = $request->validated();
+
+        // Gérer l'upload d'image si présente
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        $product = Product::create($validatedData);
 
         return response()->json([
             'message' => 'Product created successfully',
@@ -52,7 +60,21 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
-        $product->update($request->validated());
+        $validatedData = $request->validated();
+
+        // Gérer l'upload d'image si présente
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($product->image && \Storage::disk('public')->exists($product->image)) {
+                \Storage::disk('public')->delete($product->image);
+            }
+
+            // Stocker la nouvelle image
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        $product->update($validatedData);
 
         return response()->json([
             'message' => 'Product updated successfully',
@@ -69,6 +91,22 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product deleted successfully'
+        ]);
+    }
+
+    /**
+     * Get the product image URL.
+     */
+    public function getImageUrl(Product $product): JsonResponse
+    {
+        $imageUrl = null;
+
+        if ($product->image) {
+            $imageUrl = asset('storage/' . $product->image);
+        }
+
+        return response()->json([
+            'image_url' => $imageUrl
         ]);
     }
 }

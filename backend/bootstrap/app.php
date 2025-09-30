@@ -16,6 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
         
+        // Ajouter le middleware pour gérer _method override
+        $middleware->web(append: [
+            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ]);
+        
+        $middleware->api(append: [
+            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ]);
+        
         $middleware->alias([
             'role.user' => \App\Http\Middleware\EnsureUserRole::class,
             'role.admin' => \App\Http\Middleware\EnsureAdminRole::class,

@@ -12,10 +12,9 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
-
-        // Vérifier que l'utilisateur est un admin
-        // return auth()->check() && auth()->user()->role->name === 'admin';
+        // L'utilisateur est déjà vérifié par le middleware EnsureAdminRole
+        // Si on arrive ici, c'est que c'est un admin authentifié
+        return true;
     }
 
     /**
@@ -26,20 +25,15 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'price' => 'sometimes|required|numeric|min:0',
-            'reference' => 'sometimes|required|integer|unique:products,reference',
-            'brand' => 'sometimes|required|string|max:255',
-            'quantity' => 'sometimes|required|integer|min:0',
-            'image' => ['nullable|string|required', File::image()->max(2048)]
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'reference' => 'required|integer|unique:products,reference,' . $this->route('product')->id,
+            'brand' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
     }
 
-    /**
-     * Get custom error messages for validation rules.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
@@ -49,7 +43,7 @@ class UpdateProductRequest extends FormRequest
 
             'price.required' => 'Le prix est obligatoire.',
             'price.numeric' => 'Le prix doit être un nombre.',
-            'price.min' => 'Le prix ne peut pas être négatif.',
+            'price.min' => 'Le prix doit être positif.',
 
             'reference.required' => 'La référence est obligatoire.',
             'reference.integer' => 'La référence doit être un nombre entier.',
@@ -61,11 +55,11 @@ class UpdateProductRequest extends FormRequest
 
             'quantity.required' => 'La quantité est obligatoire.',
             'quantity.integer' => 'La quantité doit être un nombre entier.',
-            'quantity.min' => 'La quantité ne peut pas être négative.',
+            'quantity.min' => 'La quantité doit être positive ou nulle.',
 
-            'image.string' => 'L\'image doit être une chaîne de caractères.',
-            'image.max' => 'Le poids de l\'image ne peut dépasser 2Mo.',
-            'image.required' => 'L\'image est obligatoire.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.mimes' => 'L\'image doit être au format JPEG, PNG, JPG, GIF ou WebP.',
+            'image.max' => 'L\'image ne peut pas dépasser 2 Mo.',
         ];
     }
 
