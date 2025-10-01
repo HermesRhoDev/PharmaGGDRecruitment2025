@@ -3,25 +3,33 @@
 import { useState, useEffect } from "react";
 import { getProducts, deleteProduct, updateProduct } from "App/server/productActions";
 import EditProductForm from "./EditProductForm";
+import Pagination from "./Pagination";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  
+  // États pour la pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage, perPage);
+  }, [currentPage, perPage]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1, itemsPerPage = 10) => {
+    setLoading(true);
     try {
-      const result = await getProducts();
+      const result = await getProducts(page, itemsPerPage);
       
       if (result.success) {
         setProducts(result.data);
+        setPagination(result.pagination);
       } else {
         setError(result.error);
       }
@@ -43,8 +51,8 @@ export default function ProductsPage() {
       const result = await deleteProduct(productId);
       
       if (result.success) {
-        // Supprimer le produit de la liste locale
-        setProducts(products.filter(product => product.id !== productId));
+        // Recharger la page actuelle après suppression
+        await fetchProducts(currentPage, perPage);
         alert("Produit supprimé avec succès !");
       } else {
         alert(`Erreur lors de la suppression: ${result.error}`);
@@ -73,10 +81,8 @@ export default function ProductsPage() {
       console.log("Update Result:", result);
       
       if (result.success) {
-        // Mettre à jour le produit dans la liste locale
-        setProducts(products.map(product => 
-          product.id === editingProduct.id ? result.data : product
-        ));
+        // Recharger la page actuelle après modification
+        await fetchProducts(currentPage, perPage);
         setEditingProduct(null);
         alert("Produit modifié avec succès !");
       } else {
@@ -95,6 +101,15 @@ export default function ProductsPage() {
     setEditingProduct(null);
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    setCurrentPage(1); // Retourner à la première page
+  };
+
   if (loading) {
     return <div>Chargement des produits...</div>;
   }
@@ -111,7 +126,12 @@ export default function ProductsPage() {
         <p>Aucun produit trouvé.</p>
       ) : (
         <div>
-          <p>Nombre de produits: {products.length}</p>
+          {pagination && (
+            <p>
+              Affichage de {pagination.from} à {pagination.to} sur {pagination.total} produits
+            </p>
+          )}
+          
           <div style={{ display: "grid", gap: "10px", marginTop: "20px" }}>
             {products.map((product) => (
               <div 
@@ -165,6 +185,15 @@ export default function ProductsPage() {
               </div>
             ))}
           </div>
+
+          {/* Composant de pagination */}
+          {pagination && (
+            <Pagination
+              pagination={pagination}
+              onPageChange={handlePageChange}
+              onPerPageChange={handlePerPageChange}
+            />
+          )}
         </div>
       )}
 

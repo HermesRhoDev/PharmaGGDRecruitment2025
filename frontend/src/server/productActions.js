@@ -2,7 +2,7 @@
 
 import { adminAuth } from "App/lib/auth-admin"
 
-export async function getProducts() {
+export async function getProducts(page = 1, perPage = 10) {
     try {
         // Récupérer la session admin
         const session = await adminAuth()
@@ -11,7 +11,11 @@ export async function getProducts() {
             throw new Error("Non authentifié")
         }
 
-        const response = await fetch(`${process.env.BACKEND_URL}/admin/products`, {
+        const url = new URL(`${process.env.BACKEND_URL}/admin/products`)
+        url.searchParams.append('page', page.toString())
+        url.searchParams.append('per_page', perPage.toString())
+
+        const response = await fetch(url.toString(), {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${session.user.laravelAccessToken}`,
@@ -24,8 +28,12 @@ export async function getProducts() {
         }
 
         const data = await response.json()
-        // Extraire le tableau products de la réponse
-        return { success: true, data: data.products }
+        // Retourner les produits et les informations de pagination
+        return { 
+            success: true, 
+            data: data.products,
+            pagination: data.pagination
+        }
     } catch (error) {
         return { success: false, error: error.message }
     }

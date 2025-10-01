@@ -7,19 +7,38 @@ use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the products.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $products = Product::orderBy('created_at', 'desc')->get();
+        $perPage = $request->get('per_page', 10); // Par défaut 10 produits par page
+        $page = $request->get('page', 1);
+
+        // Validation des paramètres
+        $perPage = min(max((int)$perPage, 1), 100); // Entre 1 et 100
+
+        $products = Product::orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
             'message' => 'Products retrieved successfully',
-            'products' => $products
+            'products' => $products->items(),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+                'from' => $products->firstItem(),
+                'to' => $products->lastItem(),
+                'has_more_pages' => $products->hasMorePages(),
+                'next_page_url' => $products->nextPageUrl(),
+                'prev_page_url' => $products->previousPageUrl()
+            ]
         ]);
     }
 
