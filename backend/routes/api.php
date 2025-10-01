@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,13 @@ Route::prefix('admin/auth')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register']);
     Route::post('/login', [AdminAuthController::class, 'login']);
     Route::get('/roles', [AdminAuthController::class, 'getRoles']);
+});
+
+// Public routes for products (accessible to everyone)
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/{product}', [ProductController::class, 'show']);
+    Route::get('/{product}/related', [ProductController::class, 'related']);
 });
 
 // Protected routes for users
@@ -65,5 +73,5 @@ Route::middleware(['auth:sanctum', 'role.admin'])->group(function () {
 
 // Admin CRUD routes for products
 Route::middleware(['auth:sanctum', 'role.admin'])->prefix('admin')->group(function () {
-    Route::apiResource('products', ProductController::class);
+    Route::apiResource('products', AdminProductController::class);
 });

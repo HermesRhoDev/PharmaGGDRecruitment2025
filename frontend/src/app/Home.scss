@@ -3,151 +3,209 @@
 
 .home-page {
   min-height: 100vh;
-  background-color: $gray-100;
-  padding: 3rem 0;
+  background: linear-gradient(135deg, $primary-color 0%, color.adjust($primary-color, $lightness: 10%) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
 }
 
 .home-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1rem;
-
-  @include responsive(tablet) {
-    padding: 0 1.5rem;
-  }
-
-  @include responsive(desktop) {
-    padding: 0 2rem;
-  }
+  max-width: 600px;
+  width: 100%;
 }
 
 .home-card {
-  @include card;
-
-  .home-title {
-    font-size: 1.875rem;
+  background: $white;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  
+  h1 {
+    font-size: 2.5rem;
     font-weight: 700;
     color: $gray-900;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-
-  .auth-grid {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr;
-
-    @include responsive(tablet) {
-      grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 1rem;
+    
+    @include responsive(mobile) {
+      font-size: 2rem;
     }
   }
+  
+  p {
+    font-size: 1.125rem;
+    color: $gray-600;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    
+    &:last-of-type {
+      margin-bottom: 2.5rem;
+    }
+  }
+}
 
-  .auth-section {
-    padding: 1.5rem;
-    border-radius: 8px;
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  @include responsive(tablet) {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  
+  &.primary {
+    background-color: $primary-color;
+    color: $white;
+    
+    &:hover {
+      background-color: $primary-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($primary-color, 0.3);
+    }
+  }
+  
+  &.secondary {
+    background-color: $white;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: $white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($primary-color, 0.3);
+    }
+  }
+}
+
+.auth-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+
+  @include responsive(tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.auth-section {
+  padding: 1.5rem;
+  border-radius: 8px;
+
+  &.admin {
+    background-color: color.mix($secondary-color, $white, 8%);
+  }
+
+  &.user {
+    background-color: color.mix($primary-color, $white, 8%);
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
 
     &.admin {
-      background-color: color.mix($secondary-color, $white, 8%);
+      color: color.adjust($secondary-color, $lightness: 10%);
     }
 
     &.user {
-      background-color: color.mix($primary-color, $white, 8%);
+      color: color.adjust($primary-color, $lightness: 10%);
+    }
+  }
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+
+    &.admin {
+      color: color.adjust($secondary-color, $lightness: 5%);
     }
 
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
+    &.user {
+      color: color.adjust($primary-color, $lightness: 5%);
+    }
+  }
+
+  .credentials {
+    margin-bottom: 1rem;
+
+    .credential {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
 
       &.admin {
-        color: color.adjust($secondary-color, $lightness: 10%);
+        color: color.adjust($secondary-color, $lightness: 15%);
       }
 
       &.user {
-        color: color.adjust($primary-color, $lightness: 10%);
-      }
-    }
-
-    p {
-      margin-bottom: 1rem;
-      line-height: 1.6;
-
-      &.admin {
-        color: color.adjust($secondary-color, $lightness: 5%);
+        color: color.adjust($primary-color, $lightness: 15%);
       }
 
-      &.user {
-        color: color.adjust($primary-color, $lightness: 5%);
-      }
-    }
-
-    .credentials {
-      margin-bottom: 1rem;
-
-      .credential {
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-
-        &.admin {
-          color: color.adjust($secondary-color, $lightness: 15%);
-        }
-
-        &.user {
-          color: color.adjust($primary-color, $lightness: 15%);
-        }
-
-        strong {
-          font-weight: 600;
-        }
-      }
-    }
-
-    .auth-button {
-      @include button($primary-color, $primary-dark);
-      text-decoration: none;
-
-      &.admin {
-        @include button($secondary-color, $secondary-dark);
+      strong {
+        font-weight: 600;
       }
     }
   }
 
-  .tech-info {
-    margin-top: 2rem;
-    background-color: $gray-50;
-    padding: 1.5rem;
-    border-radius: 8px;
+  .auth-button {
+    @include button($primary-color, $primary-dark);
+    text-decoration: none;
 
-    h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: $gray-800;
-      margin-bottom: 1rem;
+    &.admin {
+      @include button($secondary-color, $secondary-dark);
     }
+  }
+}
 
-    .tech-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+.tech-info {
+  margin-top: 2rem;
+  background-color: $gray-50;
+  padding: 1.5rem;
+  border-radius: 8px;
 
-      li {
-        margin-bottom: 0.5rem;
-        font-size: 0.875rem;
-        color: $gray-600;
-        position: relative;
-        padding-left: 1rem;
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $gray-800;
+    margin-bottom: 1rem;
+  }
 
-        &::before {
-          content: "•";
-          position: absolute;
-          left: 0;
-          color: $primary-color;
-          font-weight: bold;
-        }
+  .tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
-        strong {
-          color: $gray-800;
-        }
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      color: $gray-600;
+      position: relative;
+      padding-left: 1rem;
+
+      &::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: $primary-color;
+        font-weight: bold;
+      }
+
+      strong {
+        color: $gray-800;
       }
     }
   }

@@ -5,6 +5,7 @@ import { getProducts, deleteProduct, updateProduct, createProduct } from "App/se
 import ProductForm from "./ProductForm";
 import Pagination from "./Pagination";
 import ProductFilters from "./ProductFilters";
+import AdminLayout from "../../../../components/AdminLayout";
 import "../../../styles/admin/product.scss";
 
 // Fonction utilitaire pour supprimer les balises HTML
@@ -164,110 +165,119 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="products-page">
-      {/* Titre principal */}
-      <div className="products-title">
-        <h1>Liste des produits</h1>
-      </div>
+    <AdminLayout>
+      <div className="products-page">
+        {/* Titre de la page */}
+        <div className="products-title">
+          <h1>Gestion des Produits</h1>
+        </div>
 
-      {/* Bouton de création */}
-      <div className="products-actions">
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="btn-create"
-        >
-          + Créer un produit
-        </button>
-      </div>
+        {/* Actions principales */}
+        <div className="products-actions">
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="btn-create"
+          >
+            + Créer un produit
+          </button>
+        </div>
 
-      {/* Filtres */}
-      {filters && (
+        {/* Filtres */}
         <ProductFilters
           filters={filters}
           onFiltersChange={handleFiltersChange}
-          onReset={handleFiltersReset}
+          onFiltersReset={handleFiltersReset}
         />
-      )}
 
-      {loading && <div className="loading">Chargement des produits...</div>}
-      {error && <div className="error">Erreur: {error}</div>}
+        {/* États de chargement et d'erreur */}
+        {loading && <div className="loading">Chargement des produits...</div>}
+        {error && <div className="error">Erreur: {error}</div>}
 
-      {!loading && !error && (
-        <div className="products-content">
-          <div className="products-grid">
-            {products.map((product) => (
-              <div key={product.id} className="product-card">
-                {/* Image du produit - plus petite et conditionnelle */}
-                {product.image && (
-                  <div className="product-image-small">
-                    <img 
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${product.image}`} 
-                      alt={product.name}
-                    />
-                  </div>
-                )}
-                
-                <div className="product-info">
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-brand">{product.brand}</p>
-                  <p className="product-price">{product.price} €</p>
-                  <p className="product-reference">Réf: {product.reference}</p>
+        {/* Liste des produits */}
+        {!loading && !error && (
+          <div className="products-content">
+            <div className="products-grid">
+              {products.map((product) => (
+                <div key={product.id} className="product-card">
+                  {/* Image du produit - plus petite et conditionnelle */}
+                  {product.image && (
+                    <div className="product-image-small">
+                      <img 
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${product.image}`} 
+                        alt={product.name}
+                      />
+                    </div>
+                  )}
                   
-                  <p className={`product-stock ${product.quantity <= 5 ? 'low-stock' : product.quantity <= 10 ? 'medium-stock' : 'high-stock'}`}>
-                    Stock: {product.quantity}
-                  </p>
+                  <div className="product-info">
+                    <h3 className="product-name">{product.name}</h3>
+                    <p className="product-brand">{product.brand}</p>
+                    <p className="product-price">{product.price} €</p>
+                    <p className="product-reference">Réf: {product.reference}</p>
+                    
+                    {/* Description du produit */}
+                    {product.description && (
+                      <div className="product-description">
+                        {truncateDescription(product.description)}
+                      </div>
+                    )}
+                    
+                    <p className={`product-stock ${product.quantity <= 5 ? 'low-stock' : product.quantity <= 10 ? 'medium-stock' : 'high-stock'}`}>
+                      Stock: {product.quantity}
+                    </p>
+                  </div>
+                  
+                  <div className="product-actions">
+                    <button
+                      onClick={() => handleEditProduct(product)}
+                      className="btn-edit"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProduct(product.id, product.name)}
+                      disabled={deletingId === product.id}
+                      className="btn-delete"
+                    >
+                      {deletingId === product.id ? "Suppression..." : "Supprimer"}
+                    </button>
+                  </div>
                 </div>
-                
-                <div className="product-actions">
-                  <button
-                    onClick={() => handleEditProduct(product)}
-                    className="btn-edit"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => handleDeleteProduct(product.id, product.name)}
-                    disabled={deletingId === product.id}
-                    className="btn-delete"
-                  >
-                    {deletingId === product.id ? "Suppression..." : "Supprimer"}
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Composant de pagination */}
+            {pagination && (
+              <Pagination
+                pagination={pagination}
+                onPageChange={handlePageChange}
+                onPerPageChange={handlePerPageChange}
+              />
+            )}
           </div>
+        )}
 
-          {/* Composant de pagination */}
-          {pagination && (
-            <Pagination
-              pagination={pagination}
-              onPageChange={handlePageChange}
-              onPerPageChange={handlePerPageChange}
-            />
-          )}
-        </div>
-      )}
+        {/* Formulaire d'édition modal */}
+        {editingProduct && (
+          <ProductForm
+            product={editingProduct}
+            onSave={handleSaveProduct}
+            onCancel={handleCancelEdit}
+            isLoading={isUpdating}
+            mode="edit"
+          />
+        )}
 
-      {/* Formulaire d'édition modal */}
-      {editingProduct && (
-        <ProductForm
-          product={editingProduct}
-          onSave={handleSaveProduct}
-          onCancel={handleCancelEdit}
-          isLoading={isUpdating}
-          mode="edit"
-        />
-      )}
-
-      {/* Formulaire de création modal */}
-      {showCreateForm && (
-        <ProductForm
-          onSave={handleCreateProduct}
-          onCancel={handleCancelCreate}
-          isLoading={isCreating}
-          mode="create"
-        />
-      )}
-    </div>
+        {/* Formulaire de création modal */}
+        {showCreateForm && (
+          <ProductForm
+            onSave={handleCreateProduct}
+            onCancel={handleCancelCreate}
+            isLoading={isCreating}
+            mode="create"
+          />
+        )}
+      </div>
+    </AdminLayout>
   );
 }

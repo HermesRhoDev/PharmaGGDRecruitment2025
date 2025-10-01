@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import 'App/app/Home.scss';
 
 export default function Home() {
@@ -5,9 +6,18 @@ export default function Home() {
         <div className="home-page">
             <div className="home-container">
                 <div className="home-card">
-                    <h1>Bienvenue sur la page d'accueil</h1>
-                    <p>Ceci est un exercice NextJS - Laravel</p>
-                    <p>Vous devrez mettre en place les exercices listés dans le README.md de la racine du répo.</p>
+                    <h1>Bienvenue sur PharmaGDD</h1>
+                    <p>Découvrez notre catalogue de produits pharmaceutiques</p>
+                    <p>Explorez notre gamme complète de produits de qualité.</p>
+                    
+                    <div className="home-actions">
+                        <Link href="/products" className="cta-button primary">
+                            Voir nos produits
+                        </Link>
+                        <Link href="/admin" className="cta-button secondary">
+                            Espace administrateur
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

@@ -16,40 +16,80 @@
 .dashboard-header {
   background-color: $white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
-  .header-content {
+  .dashboard-header-content {
     @include flex-between;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
 
     @include responsive(tablet) {
-      padding: 1.5rem 1.5rem;
+      padding: 1rem 1.5rem;
     }
 
     @include responsive(desktop) {
-      padding: 1.5rem 2rem;
+      padding: 1rem 2rem;
     }
 
-    h1 {
-      font-size: 1.875rem;
+    .dashboard-title {
+      font-size: 1.5rem;
       font-weight: 700;
       color: $gray-900;
-    }
 
-    .user-info {
-      @include flex-center;
-      gap: 1rem;
-
-      .user-name {
-        font-size: 0.875rem;
-        color: $gray-600;
-
-        strong {
-          color: $gray-800;
+      a {
+        text-decoration: none;
+        color: inherit;
+        
+        &:hover {
+          color: $secondary-color;
         }
       }
 
+      @include responsive(mobile) {
+        font-size: 1.25rem;
+      }
+    }
+
+    .dashboard-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+
+      @include responsive(mobile) {
+        gap: 1rem;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: $gray-600;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+
+        &:hover {
+          color: $secondary-color;
+          background-color: color.mix($secondary-color, $white, 10%);
+        }
+
+        &.active {
+          color: $secondary-color;
+          background-color: color.mix($secondary-color, $white, 15%);
+          font-weight: 600;
+        }
+
+        @include responsive(mobile) {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .dashboard-user-section {
       .logout-button {
         padding: 0.5rem 1rem;
         border: none;
@@ -57,6 +97,7 @@
         font-weight: 500;
         cursor: pointer;
         transition: background-color 0.2s ease;
+        font-size: 0.875rem;
 
         &.admin {
           @include button($secondary-color, $secondary-dark);
@@ -65,6 +106,26 @@
         &.user {
           @include button($primary-color, $primary-dark);
         }
+
+        @include responsive(mobile) {
+          padding: 0.375rem 0.75rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    // Responsive : empiler les éléments sur mobile
+    @include responsive(mobile) {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+
+      .dashboard-nav {
+        justify-content: center;
+      }
+
+      .dashboard-user-section {
+        text-align: center;
       }
     }
   }
@@ -98,6 +159,30 @@
   }
 }
 
+.dashboard-content {
+  .dashboard-section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $gray-900;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .dashboard-cards {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+
+    @include responsive(tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include responsive(desktop) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
 .dashboard-card {
   @include card;
   
@@ -109,6 +194,12 @@
   }
 
   .card-content {
+    p {
+      margin-bottom: 1rem;
+      color: $gray-600;
+      line-height: 1.6;
+    }
+
     .info-list {
       list-style: none;
       padding: 0;
@@ -134,31 +225,34 @@
         margin-bottom: 0.5rem;
       }
 
-      button {
+      .card-button {
+        display: block;
         width: 100%;
-        text-align: left;
+        text-align: center;
         padding: 0.75rem;
         border: none;
         border-radius: 6px;
         cursor: pointer;
         transition: background-color 0.2s ease;
         font-size: 0.875rem;
+        text-decoration: none;
+        font-weight: 500;
 
         &.admin {
-          background-color: color.mix($secondary-color, $white, 15%);
-          color: color.adjust($secondary-color, $lightness: 15%);
+          background-color: $secondary-color;
+          color: white;
 
           &:hover {
-            background-color: color.mix($secondary-color, $white, 25%);
+            background-color: $secondary-dark;
           }
         }
 
         &.user {
-          background-color: color.mix($primary-color, $white, 15%);
-          color: color.adjust($primary-color, $lightness: 15%);
+          background-color: $primary-color;
+          color: white;
 
           &:hover {
-            background-color: color.mix($primary-color, $white, 25%);
+            background-color: $primary-dark;
           }
         }
       }
