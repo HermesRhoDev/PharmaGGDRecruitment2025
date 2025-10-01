@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'reference' => 'required|integer|unique:products,reference,' . $this->route('product')->id,
             'brand' => 'required|string|max:255',
+            'description' => 'nullable|string|max:10000',
             'quantity' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
@@ -53,6 +54,9 @@ class UpdateProductRequest extends FormRequest
             'brand.string' => 'La marque doit être une chaîne de caractères.',
             'brand.max' => 'La marque ne peut pas dépasser 255 caractères.',
 
+            'description.string' => 'La description doit être une chaîne de caractères.',
+            'description.max' => 'La description ne peut pas dépasser 10000 caractères.',
+
             'quantity.required' => 'La quantité est obligatoire.',
             'quantity.integer' => 'La quantité doit être un nombre entier.',
             'quantity.min' => 'La quantité doit être positive ou nulle.',
@@ -75,6 +79,7 @@ class UpdateProductRequest extends FormRequest
             'price' => 'prix',
             'reference' => 'référence',
             'brand' => 'marque',
+            'description' => 'description',
             'quantity' => 'quantité',
             'image' => 'image'
         ];

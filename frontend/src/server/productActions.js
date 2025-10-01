@@ -150,3 +150,73 @@ export async function updateProduct(productId, productData) {
         return { success: false, error: error.message }
     }
 }
+
+export async function createProduct(productData) {
+    try {
+        // Récupérer la session admin
+        const session = await adminAuth()
+        
+        if (!session || !session.user?.laravelAccessToken) {
+            throw new Error("Non authentifié")
+        }
+
+        console.log("=== DEBUG CREATE PRODUCT ===")
+        console.log("Product Data:", productData)
+        console.log("URL:", `${process.env.BACKEND_URL}/admin/products`)
+        console.log("Token:", session.user.laravelAccessToken ? "Present" : "Missing")
+
+        // Déterminer le type de contenu et les headers
+        const isFormData = productData instanceof FormData;
+        const headers = {
+            Accept: "application/json",
+            Authorization: `Bearer ${session.user.laravelAccessToken}`,
+        };
+
+        let body;
+
+        if (isFormData) {
+            // Pour FormData, ne pas ajouter Content-Type
+            body = productData;
+        } else {
+            // Pour JSON
+            headers["Content-Type"] = "application/json";
+            body = JSON.stringify(productData);
+        }
+
+        const response = await fetch(`${process.env.BACKEND_URL}/admin/products`, {
+            method: "POST",
+            headers: headers,
+            body: body,
+        })
+
+        console.log("=== RESPONSE STATUS ===")
+        console.log("Status:", response.status)
+        console.log("Status Text:", response.statusText)
+
+        if (!response.ok) {
+            const errorText = await response.text()
+            console.error("=== ERROR RESPONSE ===")
+            console.error("Status:", response.status)
+            console.error("Status Text:", response.statusText)
+            console.error("Error Body:", errorText)
+            
+            // Essayer de parser le JSON d'erreur
+            try {
+                const errorJson = JSON.parse(errorText)
+                throw new Error(`Erreur ${response.status}: ${JSON.stringify(errorJson, null, 2)}`)
+            } catch (parseError) {
+                throw new Error(`Erreur ${response.status}: ${errorText}`)
+            }
+        }
+
+        const data = await response.json()
+        console.log("=== SUCCESS RESPONSE ===")
+        console.log("Response Data:", data)
+        
+        return { success: true, data: data.product }
+    } catch (error) {
+        console.error("=== CREATE PRODUCT ERROR ===")
+        console.error("Error:", error)
+        return { success: false, error: error.message }
+    }
+}

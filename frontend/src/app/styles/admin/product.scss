@@ -1,3 +1,4 @@
+@import '../../../styles/wysiwyg.scss';
 // Variables SCSS
 $primary-color: #28a745;
 $primary-hover: #218838;
@@ -258,7 +259,6 @@ $breakpoint-desktop: 1200px;
     align-items: center;
 
     input {
-      //   flex: 1;
       width: 100%;
       padding: 8px 12px;
       border: 1px solid #ced4da;
@@ -331,3 +331,233 @@ $breakpoint-desktop: 1200px;
     }
   }
 }
+
+// Page principale des produits
+.products-page {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 15px;
+  }
+}
+
+// Titre principal
+.products-title {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    color: #333;
+    font-size: $font-size-xl;
+    font-weight: 600;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    text-align: center;
+    
+    h1 {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// Actions (bouton créer)
+.products-actions {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+
+  .btn-create {
+    @include button-variant($primary-color, $primary-hover);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: $box-shadow-hover;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    justify-content: center;
+    
+    .btn-create {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 20px;
+    }
+  }
+}
+
+// Contenu des produits
+.products-content {
+  margin-top: 20px;
+}
+
+// Grille des produits avec marges
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $grid-gap;
+  padding: 0 10px; // Ajout de padding pour éviter que les cartes touchent les bords
+  margin-bottom: 30px;
+
+  @media (max-width: $breakpoint-mobile) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 0 5px;
+  }
+
+  @media (min-width: #{$breakpoint-mobile + 1px}) and (max-width: $breakpoint-tablet) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+// Carte produit mise à jour
+.product-card {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $card-padding;
+  box-shadow: $box-shadow;
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: fit-content; // Réduire la hauteur automatique
+
+  &:hover {
+    box-shadow: $box-shadow-hover;
+  }
+
+  // Image produit plus petite
+  .product-image-small {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+    align-self: center;
+    border-radius: $border-radius-sm;
+    overflow: hidden;
+    border: 1px solid $border-color;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .product-info {
+    flex: 1;
+    margin-bottom: 15px;
+
+    .product-name {
+      font-size: $font-size-base;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    .product-brand {
+      font-size: $font-size-sm;
+      color: $text-muted;
+      margin: 0 0 5px 0;
+    }
+
+    .product-price {
+      font-size: $font-size-base;
+      font-weight: bold;
+      color: $primary-color;
+      margin: 0 0 5px 0;
+    }
+
+    .product-reference {
+      font-size: $font-size-sm;
+      color: $text-muted;
+      margin: 0 0 5px 0;
+    }
+
+    .product-stock {
+      font-size: $font-size-sm;
+      font-weight: 500;
+      margin: 0;
+      padding: 2px 6px;
+      border-radius: $border-radius-sm;
+      display: inline-block;
+
+      &.low-stock {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+
+      &.medium-stock {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+
+      &.high-stock {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    }
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+
+    .btn-edit {
+      @include button-variant($primary-color, $primary-hover);
+      flex: 1;
+      font-size: $font-size-sm;
+      padding: 6px 12px;
+    }
+
+    .btn-delete {
+      @include button-variant($danger-color, $danger-hover);
+      flex: 1;
+      font-size: $font-size-sm;
+      padding: 6px 12px;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      flex-direction: column;
+      
+      .btn-edit, .btn-delete {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// États de chargement et d'erreur
+.loading, .error {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: $font-size-base;
+  
+  &.loading {
+    color: $text-muted;
+  }
+  
+  &.error {
+    color: $danger-color;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: $border-radius;
+    margin: 20px 10px; // Ajout de marges latérales
+  }
+}
+
+// Suppression de l'ancien style products-header
+// (remplacé par products-title et products-actions)

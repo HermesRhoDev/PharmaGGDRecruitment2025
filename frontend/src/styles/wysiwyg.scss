@@ -1,0 +1,221 @@
+// Variables
+$primary-color: #007bff;
+$border-color: #ddd;
+$background-color: #f8f9fa;
+$text-color: #333;
+$error-color: #dc3545;
+$success-color: #28a745;
+
+.wysiwyg-editor {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  background: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  .wysiwyg-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid $border-color;
+    background: $background-color;
+    border-radius: 8px 8px 0 0;
+    gap: 4px;
+    flex-wrap: wrap;
+
+    .wysiwyg-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: $text-color;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba($primary-color, 0.1);
+        border-color: rgba($primary-color, 0.2);
+      }
+
+      &.active {
+        background: $primary-color;
+        color: white;
+        border-color: $primary-color;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+
+    .wysiwyg-separator {
+      width: 1px;
+      height: 24px;
+      background: $border-color;
+      margin: 0 4px;
+    }
+
+    .wysiwyg-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: normal;
+      font-weight: bold;
+    }
+  }
+
+  .wysiwyg-content {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .wysiwyg-editable {
+      padding: 16px;
+      min-height: 200px;
+      outline: none;
+      line-height: 1.6;
+      color: $text-color;
+
+      // Styles pour les éléments de contenu
+      h1 {
+        font-size: 2em;
+        font-weight: bold;
+        margin: 0.5em 0;
+        line-height: 1.2;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: 0.5em 0;
+        line-height: 1.3;
+      }
+
+      p {
+        margin: 0.5em 0;
+        
+        &:first-child {
+          margin-top: 0;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      ul, ol {
+        margin: 0.5em 0;
+        padding-left: 1.5em;
+
+        li {
+          margin: 0.25em 0;
+        }
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+
+      ol {
+        list-style-type: decimal;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+
+      em {
+        font-style: italic;
+      }
+
+      u {
+        text-decoration: underline;
+      }
+
+      // Placeholder
+      &[data-slate-placeholder] {
+        position: relative;
+
+        &::before {
+          content: attr(data-slate-placeholder);
+          position: absolute;
+          color: #aaa;
+          pointer-events: none;
+          width: 100%;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  .wysiwyg-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid $border-color;
+    background: $background-color;
+    border-radius: 0 0 8px 8px;
+    font-size: 12px;
+
+    .wysiwyg-counter {
+      color: #666;
+
+      .error {
+        color: $error-color;
+        font-weight: 500;
+      }
+    }
+
+    .wysiwyg-error {
+      color: $error-color;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+
+  // États d'erreur
+  &.error {
+    border-color: $error-color;
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .wysiwyg-toolbar {
+      padding: 6px 8px;
+
+      .wysiwyg-button {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+    }
+
+    .wysiwyg-content .wysiwyg-editable {
+      padding: 12px;
+      min-height: 150px;
+    }
+
+    .wysiwyg-footer {
+      padding: 6px 8px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+  }
+}
+
+// Styles globaux pour l'éditeur
+.wysiwyg-editor * {
+  box-sizing: border-box;
+}

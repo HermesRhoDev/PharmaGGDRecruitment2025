@@ -1,11 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProducts, deleteProduct, updateProduct } from "App/server/productActions";
-import EditProductForm from "./EditProductForm";
+import { getProducts, deleteProduct, updateProduct, createProduct } from "App/server/productActions";
+import ProductForm from "./ProductForm";
 import Pagination from "./Pagination";
 import ProductFilters from "./ProductFilters";
 import "../../../styles/admin/product.scss";
+
+// Fonction utilitaire pour supprimer les balises HTML
+const stripHtml = (html) => {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '');
+};
+
+// Fonction utilitaire pour tronquer le texte
+const truncateDescription = (text, maxLength = 120) => {
+  if (!text) return '';
+  const stripped = stripHtml(text);
+  if (stripped.length <= maxLength) return stripped;
+  return stripped.substring(0, maxLength).trim() + '...';
+};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -16,6 +30,8 @@ export default function ProductsPage() {
   const [deletingId, setDeletingId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   
   // États pour la pagination et les filtres
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,8 +116,36 @@ export default function ProductsPage() {
     setEditingProduct(null);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handleCreateProduct = async (productData) => {
+    setIsCreating(true);
+    
+    try {
+      const result = await createProduct(productData);
+      
+      if (result.success) {
+        // Recharger la première page après création
+        await fetchProducts(1, perPage, activeFilters);
+        setCurrentPage(1); // Retourner à la première page pour voir le nouveau produit
+        setShowCreateForm(false);
+        alert("Produit créé avec succès !");
+      } else {
+        console.error("Create failed:", result.error);
+        alert(`Erreur lors de la création: ${result.error}`);
+      }
+    } catch (err) {
+      console.error("Create exception:", err);
+      alert(`Erreur de connexion: ${err.message}`);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleCancelCreate = () => {
+    setShowCreateForm(false);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   const handlePerPageChange = (newPerPage) => {
@@ -116,106 +160,64 @@ export default function ProductsPage() {
 
   const handleFiltersReset = () => {
     setActiveFilters({});
-    setCurrentPage(1);
+    setCurrentPage(1); // Retourner à la première page lors du reset
   };
 
-  if (loading) {
-    return (
-      <div style={{ padding: "20px", textAlign: "center" }}>
-        <div style={{ fontSize: "18px", color: "#6c757d" }}>Chargement des produits...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ padding: "20px", textAlign: "center" }}>
-        <div style={{ fontSize: "18px", color: "#dc3545" }}>Erreur: {error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ marginBottom: "20px", color: "#343a40" }}>Liste des Produits</h1>
+    <div className="products-page">
+      {/* Titre principal */}
+      <div className="products-title">
+        <h1>Liste des produits</h1>
+      </div>
 
-      {/* Composant de filtres */}
-      <ProductFilters
-        filters={filters}
-        onFiltersChange={handleFiltersChange}
-        onReset={handleFiltersReset}
-      />
+      {/* Bouton de création */}
+      <div className="products-actions">
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className="btn-create"
+        >
+          + Créer un produit
+        </button>
+      </div>
 
-      {products.length === 0 ? (
-        <div style={{ 
-          textAlign: "center", 
-          padding: "40px", 
-          backgroundColor: "#f8f9fa", 
-          borderRadius: "8px",
-          border: "1px solid #dee2e6"
-        }}>
-          <p style={{ fontSize: "18px", color: "#6c757d", margin: 0 }}>
-            Aucun produit trouvé avec les critères sélectionnés.
-          </p>
-        </div>
-      ) : (
-        <div>
-          {pagination && (
-            <div style={{ 
-              marginBottom: "15px", 
-              padding: "10px", 
-              backgroundColor: "#e9ecef", 
-              borderRadius: "4px",
-              fontSize: "14px",
-              color: "#495057"
-            }}>
-              <strong>Résultats :</strong> {pagination.from} à {pagination.to} sur {pagination.total} produits
-              {Object.keys(activeFilters).length > 0 && (
-                <span style={{ marginLeft: "10px", fontStyle: "italic" }}>
-                  (filtré)
-                </span>
-              )}
-            </div>
-          )}
-          
-          {/* Grille en deux colonnes avec classes CSS */}
+      {/* Filtres */}
+      {filters && (
+        <ProductFilters
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          onReset={handleFiltersReset}
+        />
+      )}
+
+      {loading && <div className="loading">Chargement des produits...</div>}
+      {error && <div className="error">Erreur: {error}</div>}
+
+      {!loading && !error && (
+        <div className="products-content">
           <div className="products-grid">
             {products.map((product) => (
               <div key={product.id} className="product-card">
-                {/* En-tête du produit */}
-                <div className="product-header">
-                  <div style={{ flex: 1 }}>
-                    <div className="product-name">
-                      {product.name}
-                    </div>
-                    <div className="product-price">
-                      {product.price}€
-                    </div>
+                {/* Image du produit - plus petite et conditionnelle */}
+                {product.image && (
+                  <div className="product-image-small">
+                    <img 
+                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${product.image}`} 
+                      alt={product.name}
+                    />
                   </div>
-                </div>
-
-                {/* Informations du produit */}
+                )}
+                
                 <div className="product-info">
-                  <div>
-                    <strong>Ref:</strong> {product.reference}
-                  </div>
-                  <div>
-                    <strong>Marque:</strong> {product.brand}
-                  </div>
-                  <div className="product-info-full">
-                    <strong>Stock:</strong> 
-                    <span className={product.quantity < 10 ? "stock-low" : "stock-normal"}>
-                      {product.quantity}
-                    </span>
-                    {product.quantity < 10 && (
-                      <span className="stock-warning">
-                        (Stock faible)
-                      </span>
-                    )}
-                  </div>
+                  <h3 className="product-name">{product.name}</h3>
+                  <p className="product-brand">{product.brand}</p>
+                  <p className="product-price">{product.price} €</p>
+                  <p className="product-reference">Réf: {product.reference}</p>
+                  
+                  <p className={`product-stock ${product.quantity <= 5 ? 'low-stock' : product.quantity <= 10 ? 'medium-stock' : 'high-stock'}`}>
+                    Stock: {product.quantity}
+                  </p>
                 </div>
-
-                {/* Boutons d'action */}
+                
                 <div className="product-actions">
                   <button
                     onClick={() => handleEditProduct(product)}
@@ -248,11 +250,22 @@ export default function ProductsPage() {
 
       {/* Formulaire d'édition modal */}
       {editingProduct && (
-        <EditProductForm
+        <ProductForm
           product={editingProduct}
           onSave={handleSaveProduct}
           onCancel={handleCancelEdit}
           isLoading={isUpdating}
+          mode="edit"
+        />
+      )}
+
+      {/* Formulaire de création modal */}
+      {showCreateForm && (
+        <ProductForm
+          onSave={handleCreateProduct}
+          onCancel={handleCancelCreate}
+          isLoading={isCreating}
+          mode="create"
         />
       )}
     </div>
