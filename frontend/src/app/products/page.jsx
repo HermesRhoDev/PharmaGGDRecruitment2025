@@ -112,6 +112,8 @@ export default function ProductsPage() {
                 onSearch={handleSearch}
                 placeholder="Rechercher par nom, marque ou référence..."
                 initialValue={urlState.search}
+                enableLiveSearch={true}
+                debounceMs={300}
               />
             </div>
 

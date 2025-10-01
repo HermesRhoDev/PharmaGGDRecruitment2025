@@ -143,6 +143,21 @@
       }
     }
 
+    .search-loading-indicator {
+      position: absolute;
+      right: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .search-spinner {
+        animation: spin 1s linear infinite;
+      }
+    }
+
     .clear-button {
       position: absolute;
       right: 0.75rem;
@@ -163,6 +178,16 @@
       &:hover {
         color: $gray-600;
       }
+    }
+  }
+
+  // Animation pour le spinner
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
 
