@@ -1,9 +1,10 @@
-@use 'App/styles/variables' as *;
-@use 'sass:color';
+// ===================================
+// STYLES PAGE D'ACCUEIL - PharmaGDD
+// ===================================
 
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, $primary-color 0%, color.adjust($primary-color, $lightness: 10%) 100%);
+  background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,11 +107,11 @@
   border-radius: 8px;
 
   &.admin {
-    background-color: color.mix($secondary-color, $white, 8%);
+    background-color: rgba($secondary-color, 0.08);
   }
 
   &.user {
-    background-color: color.mix($primary-color, $white, 8%);
+    background-color: rgba($primary-color, 0.08);
   }
 
   h2 {
@@ -119,11 +120,11 @@
     margin-bottom: 1rem;
 
     &.admin {
-      color: color.adjust($secondary-color, $lightness: 10%);
+      color: $secondary-light;
     }
 
     &.user {
-      color: color.adjust($primary-color, $lightness: 10%);
+      color: $primary-light;
     }
   }
 
@@ -132,11 +133,11 @@
     line-height: 1.6;
 
     &.admin {
-      color: color.adjust($secondary-color, $lightness: 5%);
+      color: $secondary-color;
     }
 
     &.user {
-      color: color.adjust($primary-color, $lightness: 5%);
+      color: $primary-color;
     }
   }
 
@@ -148,11 +149,11 @@
       margin-bottom: 0.5rem;
 
       &.admin {
-        color: color.adjust($secondary-color, $lightness: 15%);
+        color: $secondary-light;
       }
 
       &.user {
-        color: color.adjust($primary-color, $lightness: 15%);
+        color: $primary-light;
       }
 
       strong {

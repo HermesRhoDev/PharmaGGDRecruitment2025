@@ -1,5 +1,6 @@
-// Import des variables depuis products.scss
-@import 'products';
+// ======================
+// PRODUCT DETAIL PAGE STYLES
+// ======================
 
 .product-detail-page {
   min-height: 100vh;
@@ -8,12 +9,87 @@
 
 // Header (réutilise les styles de products.scss)
 .product-header {
-  @extend .products-header;
+  background-color: $white;
+  border-bottom: 1px solid $gray-200;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    @include responsive(mobile) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    @include responsive(tablet) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    @include responsive(desktop) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .logo {
+    text-decoration: none;
+    color: $primary-color;
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+  }
+
+  .main-nav {
+    display: flex;
+    gap: 2rem;
+
+    .nav-link {
+      text-decoration: none;
+      color: $gray-600;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+
+      &:hover,
+      &.active {
+        color: $primary-color;
+        background-color: $gray-100;
+      }
+    }
+  }
 }
 
 // Main content
 .product-main {
   padding: 2rem 0;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @include responsive(tablet) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include responsive(desktop) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 // Breadcrumb
@@ -91,7 +167,7 @@
 }
 
 // Product info
-.product-info {
+.product-info-detail {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -260,7 +336,6 @@
     .back-button {
       @include button($gray-600, $gray-700);
       padding: 0.75rem 1.5rem;
-      border: none;
       border-radius: 8px;
       text-decoration: none;
       display: inline-flex;
@@ -268,7 +343,6 @@
       justify-content: center;
       gap: 0.5rem;
       font-weight: 500;
-      transition: background-color 0.2s ease;
     }
 
     @include responsive(tablet) {
@@ -331,7 +405,6 @@
   .back-button {
     @include button($primary-color, $primary-dark);
     padding: 0.75rem 1.5rem;
-    border: none;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 500;

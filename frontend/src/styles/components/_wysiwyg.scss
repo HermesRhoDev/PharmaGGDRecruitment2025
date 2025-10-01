@@ -1,23 +1,19 @@
-// Variables
-$primary-color: #007bff;
-$border-color: #ddd;
-$background-color: #f8f9fa;
-$text-color: #333;
-$error-color: #dc3545;
-$success-color: #28a745;
+// ======================
+// WYSIWYG EDITOR COMPONENT STYLES
+// ======================
 
 .wysiwyg-editor {
-  border: 1px solid $border-color;
+  border: 1px solid $gray-300;
   border-radius: 8px;
-  background: white;
+  background: $white;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .wysiwyg-toolbar {
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    border-bottom: 1px solid $border-color;
-    background: $background-color;
+    border-bottom: 1px solid $gray-300;
+    background: $gray-50;
     border-radius: 8px 8px 0 0;
     gap: 4px;
     flex-wrap: wrap;
@@ -31,7 +27,7 @@ $success-color: #28a745;
       border: 1px solid transparent;
       border-radius: 4px;
       background: transparent;
-      color: $text-color;
+      color: $gray-700;
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
@@ -44,7 +40,7 @@ $success-color: #28a745;
 
       &.active {
         background: $primary-color;
-        color: white;
+        color: $white;
         border-color: $primary-color;
       }
 
@@ -57,7 +53,7 @@ $success-color: #28a745;
     .wysiwyg-separator {
       width: 1px;
       height: 24px;
-      background: $border-color;
+      background: $gray-300;
       margin: 0 4px;
     }
 
@@ -80,7 +76,7 @@ $success-color: #28a745;
       min-height: 200px;
       outline: none;
       line-height: 1.6;
-      color: $text-color;
+      color: $gray-700;
 
       // Styles pour les éléments de contenu
       h1 {
@@ -145,7 +141,7 @@ $success-color: #28a745;
         &::before {
           content: attr(data-slate-placeholder);
           position: absolute;
-          color: #aaa;
+          color: $gray-400;
           pointer-events: none;
           width: 100%;
           max-width: 100%;
@@ -163,22 +159,22 @@ $success-color: #28a745;
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    border-top: 1px solid $border-color;
-    background: $background-color;
+    border-top: 1px solid $gray-300;
+    background: $gray-50;
     border-radius: 0 0 8px 8px;
     font-size: 12px;
 
     .wysiwyg-counter {
-      color: #666;
+      color: $gray-600;
 
       .error {
-        color: $error-color;
+        color: $red-600;
         font-weight: 500;
       }
     }
 
     .wysiwyg-error {
-      color: $error-color;
+      color: $red-600;
       font-size: 12px;
       font-weight: 500;
     }
@@ -186,11 +182,11 @@ $success-color: #28a745;
 
   // États d'erreur
   &.error {
-    border-color: $error-color;
+    border-color: $red-600;
   }
 
   // Responsive
-  @media (max-width: 768px) {
+  @include responsive(mobile) {
     .wysiwyg-toolbar {
       padding: 6px 8px;
 

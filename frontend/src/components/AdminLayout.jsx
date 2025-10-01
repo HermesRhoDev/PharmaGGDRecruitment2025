@@ -3,7 +3,6 @@
 import { adminLogout } from "App/server/adminAuth";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import '../styles/dashboard.scss';
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();

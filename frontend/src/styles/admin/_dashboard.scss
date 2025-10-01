@@ -1,15 +1,12 @@
-@use 'variables' as *;
-@use 'sass:color';
-
 .dashboard {
   min-height: 100vh;
 
   &.admin {
-    background-color: color.mix($secondary-color, $white, 8%);
+    background-color: rgba($secondary-color, 0.1);
   }
 
   &.user {
-    background-color: color.mix($primary-color, $white, 8%);
+    background-color: rgba($primary-color, 0.1);
   }
 }
 
@@ -73,12 +70,12 @@
 
         &:hover {
           color: $secondary-color;
-          background-color: color.mix($secondary-color, $white, 10%);
+          background-color: mix($secondary-color, $white, 10%);
         }
 
         &.active {
           color: $secondary-color;
-          background-color: color.mix($secondary-color, $white, 15%);
+          background-color: mix($secondary-color, $white, 15%);
           font-weight: 600;
         }
 

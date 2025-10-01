@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function ProductFilters({ filters, onFiltersChange, appliedFilters }) {
   const [localFilters, setLocalFilters] = useState({
@@ -10,8 +10,6 @@ export default function ProductFilters({ filters, onFiltersChange, appliedFilter
     sort_by: appliedFilters?.sort_by || 'created_at',
     sort_order: appliedFilters?.sort_order || 'desc'
   });
-
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleFilterChange = (key, value) => {
     const newFilters = { ...localFilters, [key]: value };
@@ -36,32 +34,11 @@ export default function ProductFilters({ filters, onFiltersChange, appliedFilter
   return (
     <div className="product-filters">
       <div className="filters-header">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="filters-toggle"
-        >
-          <span>Filtres</span>
-          {hasActiveFilters && <span className="active-filters-indicator">•</span>}
-          <svg
-            className={`filters-arrow ${isOpen ? 'open' : ''}`}
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 9L12 15L18 9"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        <h3>Filtres</h3>
+        {hasActiveFilters && <span className="active-filters-indicator">•</span>}
       </div>
 
-      <div className={`filters-content ${isOpen ? 'open' : ''}`}>
+      <div className="filters-content open">
         <div className="filters-grid">
           {/* Tri */}
           <div className="filter-group">

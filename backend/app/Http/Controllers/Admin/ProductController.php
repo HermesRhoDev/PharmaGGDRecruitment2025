@@ -16,10 +16,8 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $perPage = $request->get('per_page', 10); // Par défaut 10 produits par page
+        $perPage = $request->get('per_page', 10);
         $page = $request->get('page', 1);
-
-        // Paramètres de recherche et filtrage
         $search = $request->get('search');
         $brand = $request->get('brand');
         $sortBy = $request->get('sort_by', 'created_at');
@@ -28,14 +26,10 @@ class ProductController extends Controller
         $maxPrice = $request->get('max_price');
         $minQuantity = $request->get('min_quantity');
         $maxQuantity = $request->get('max_quantity');
-
-        // Validation des paramètres
         $perPage = min(max((int)$perPage, 1), 100); // Entre 1 et 100
         $sortOrder = in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'desc';
         $allowedSortFields = ['name', 'price', 'reference', 'brand', 'quantity', 'created_at'];
         $sortBy = in_array($sortBy, $allowedSortFields) ? $sortBy : 'created_at';
-
-        // Construction de la requête
         $query = Product::query();
 
         // Recherche textuelle (nom, marque, référence)
@@ -119,7 +113,6 @@ class ProductController extends Controller
     {
         $validatedData = $request->validated();
 
-        // Gérer l'upload d'image si présente
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
             $validatedData['image'] = $imagePath;
@@ -151,14 +144,11 @@ class ProductController extends Controller
     {
         $validatedData = $request->validated();
 
-        // Gérer l'upload d'image si présente
         if ($request->hasFile('image')) {
-            // Supprimer l'ancienne image si elle existe
             if ($product->image && \Storage::disk('public')->exists($product->image)) {
                 \Storage::disk('public')->delete($product->image);
             }
 
-            // Stocker la nouvelle image
             $imagePath = $request->file('image')->store('products', 'public');
             $validatedData['image'] = $imagePath;
         }

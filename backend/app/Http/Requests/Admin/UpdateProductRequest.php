@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -12,8 +12,6 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // L'utilisateur est déjà vérifié par le middleware EnsureAdminRole
-        // Si on arrive ici, c'est que c'est un admin authentifié
         return true;
     }
 
@@ -24,17 +22,24 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $productId = $this->route('product');
+
         return [
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'reference' => 'required|integer|unique:products,reference,' . $this->route('product')->id,
-            'brand' => 'required|string|max:255',
-            'description' => 'nullable|string|max:10000',
-            'quantity' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'price' => ['sometimes', 'required', 'numeric', 'min:0.01'],
+            'reference' => ['sometimes', 'required', 'string', 'max:100', Rule::unique('products')->ignore($productId)],
+            'brand' => ['sometimes', 'required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:50000'],
+            'quantity' => ['sometimes', 'required', 'integer', 'min:0'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048']
         ];
     }
 
+    /**
+     * Get custom error messages for validator errors.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
@@ -44,10 +49,11 @@ class UpdateProductRequest extends FormRequest
 
             'price.required' => 'Le prix est obligatoire.',
             'price.numeric' => 'Le prix doit être un nombre.',
-            'price.min' => 'Le prix doit être positif.',
+            'price.min' => 'Le prix doit être supérieur à 0.',
 
             'reference.required' => 'La référence est obligatoire.',
-            'reference.integer' => 'La référence doit être un nombre entier.',
+            'reference.string' => 'La référence doit être une chaîne de caractères.',
+            'reference.max' => 'La référence ne peut pas dépasser 100 caractères.',
             'reference.unique' => 'Cette référence existe déjà.',
 
             'brand.required' => 'La marque est obligatoire.',
@@ -55,7 +61,7 @@ class UpdateProductRequest extends FormRequest
             'brand.max' => 'La marque ne peut pas dépasser 255 caractères.',
 
             'description.string' => 'La description doit être une chaîne de caractères.',
-            'description.max' => 'La description ne peut pas dépasser 10000 caractères.',
+            'description.max' => 'La description ne peut pas dépasser 50000 caractères.',
 
             'quantity.required' => 'La quantité est obligatoire.',
             'quantity.integer' => 'La quantité doit être un nombre entier.',
@@ -63,7 +69,7 @@ class UpdateProductRequest extends FormRequest
 
             'image.image' => 'Le fichier doit être une image.',
             'image.mimes' => 'L\'image doit être au format JPEG, PNG, JPG, GIF ou WebP.',
-            'image.max' => 'L\'image ne peut pas dépasser 2 Mo.',
+            'image.max' => 'L\'image ne peut pas dépasser 2 Mo.'
         ];
     }
 

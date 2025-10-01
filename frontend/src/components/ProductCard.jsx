@@ -11,18 +11,6 @@ export default function ProductCard({ product }) {
     }).format(price);
   };
 
-  const stripHtml = (html) => {
-    if (!html) return '';
-    return html.replace(/<[^>]*>/g, '');
-  };
-
-  const truncateDescription = (text, maxLength = 100) => {
-    if (!text) return '';
-    const cleanText = stripHtml(text);
-    if (cleanText.length <= maxLength) return cleanText;
-    return cleanText.substring(0, maxLength) + '...';
-  };
-
   return (
     <div className="product-card">
       <Link href={`/products/${product.id}`} className="product-link">
@@ -48,7 +36,7 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        <div className="product-info">
+        <div className="product-info-client">
           <h3 className="product-name">{product.name}</h3>
           <p className="product-brand">{product.brand}</p>
 

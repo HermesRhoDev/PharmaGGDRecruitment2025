@@ -13,7 +13,7 @@ export default function ProductForm({
   const [formData, setFormData] = useState({
     name: product?.name || "",
     price: product?.price || "",
-    reference: product?.reference || "",
+    reference: String(product?.reference || ""),
     brand: product?.brand || "",
     quantity: product?.quantity || "",
     description: product?.description || "",
@@ -106,13 +106,13 @@ export default function ProductForm({
       try {
         const parsed = JSON.parse(formData.description);
         const textLength = getTextLength(parsed);
-        if (textLength > 10000) {
-          newErrors.description = "La description ne peut pas dépasser 10000 caractères";
+        if (textLength > 50000) {
+          newErrors.description = "La description ne peut pas dépasser 50000 caractères";
         }
       } catch {
         // Si ce n'est pas du JSON, vérifier la longueur du texte brut
-        if (formData.description.length > 10000) {
-          newErrors.description = "La description ne peut pas dépasser 10000 caractères";
+        if (formData.description.length > 50000) {
+          newErrors.description = "La description ne peut pas dépasser 50000 caractères";
         }
       }
     }
@@ -156,7 +156,7 @@ export default function ProductForm({
       // Ajouter les données du formulaire
       formDataToSend.append('name', formData.name);
       formDataToSend.append('price', parseFloat(formData.price));
-      formDataToSend.append('reference', parseInt(formData.reference));
+      formDataToSend.append('reference', formData.reference);
       formDataToSend.append('brand', formData.brand);
       formDataToSend.append('quantity', parseInt(formData.quantity));
       formDataToSend.append('description', formData.description || '');
@@ -271,7 +271,7 @@ export default function ProductForm({
               value={formData.description}
               onChange={handleDescriptionChange}
               placeholder="Entrez une description détaillée du produit..."
-              maxLength={10000}
+              maxLength={50000}
               error={errors.description}
             />
             {errors.description && (
@@ -311,10 +311,11 @@ export default function ProductForm({
               Référence *
             </label>
             <input
-              type="number"
+              type="text"
               name="reference"
               value={formData.reference}
               onChange={handleChange}
+              placeholder="Ex: 34009359558381774632039"
               style={{
                 width: "100%",
                 padding: "8px",
@@ -395,7 +396,7 @@ export default function ProductForm({
                 padding: "10px 20px",
                 border: "none",
                 borderRadius: "4px",
-                backgroundColor: "#007bff",
+                backgroundColor: "#0a7a4b",
                 color: "white",
                 cursor: "pointer"
               }}

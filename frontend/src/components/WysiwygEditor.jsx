@@ -246,7 +246,7 @@ const WysiwygEditor = ({
   value = '', 
   onChange, 
   placeholder = 'Entrez votre description...', 
-  maxLength = 10000,
+  maxLength = 50000,
   error = null 
 }) => {
   // Créer l'éditeur une seule fois
@@ -266,7 +266,6 @@ const WysiwygEditor = ({
     
     if (currentSerialized !== newSerialized) {
       setCurrentValue(newValue);
-      // Réinitialiser l'éditeur avec la nouvelle valeur
       editor.children = newValue;
       editor.onChange();
     }

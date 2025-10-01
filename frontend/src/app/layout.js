@@ -1,4 +1,4 @@
-import 'App/styles/globals.scss';
+import 'App/styles/main.scss';
 
 export default function RootLayout({ children }) {
   return (

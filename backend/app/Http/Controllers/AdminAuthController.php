@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -91,7 +90,7 @@ class AdminAuthController extends Controller
     public function me(Request $request)
     {
         $admin = $request->user()->load('role');
-        
+
         return response()->json([
             'admin' => $admin,
             'user_type' => 'admin'
@@ -104,10 +103,10 @@ class AdminAuthController extends Controller
     public function refresh(Request $request)
     {
         $admin = $request->user();
-        
+
         // Revoke current token
         $request->user()->currentAccessToken()->delete();
-        
+
         // Create new token
         $token = $admin->createToken('admin_auth_token', ['admin'])->plainTextToken;
 
@@ -125,7 +124,7 @@ class AdminAuthController extends Controller
     public function getRoles()
     {
         $roles = Role::all();
-        
+
         return response()->json([
             'roles' => $roles
         ]);

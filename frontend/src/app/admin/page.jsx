@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import 'App/styles/auth.scss'
 import { adminAuth } from "App/server/adminAuth"
 import { redirect } from "next/navigation"
 

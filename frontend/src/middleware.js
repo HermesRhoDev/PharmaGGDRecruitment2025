@@ -36,8 +36,6 @@ export default async function middleware(req) {
 						headers: { Authorization: `Bearer ${adminToken.laravelAccessToken}` }
 					})
 
-                    console.log(adminToken.laravelAccessToken)
-
 					if (verify.ok) {
 						// Token valide, rediriger vers dashboard
 						return NextResponse.redirect(new URL("/admin/dashboard", req.url))

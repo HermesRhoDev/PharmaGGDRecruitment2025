@@ -1,41 +1,60 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { getPublicProducts } from "App/server/publicProductActions";
 import ProductCard from "App/components/ProductCard";
 import SearchBar from "App/components/SearchBar";
 import ProductFilters from "App/components/ProductFilters";
 import PublicPagination from "App/components/PublicPagination";
 import Link from 'next/link';
-import "App/styles/products.scss";
+import { useProductFiltersState } from "App/lib/useUrlState";
+import { usePaginationState } from "App/lib/usePaginationState";
 
 export default function ProductsPage() {
+  // État persistant dans l'URL
+  const [urlState, updateUrlState, resetUrlState] = useProductFiltersState();
+  
+  // Gestion de la pagination
+  const pagination = usePaginationState(urlState, updateUrlState);
+  
+  // État local pour les données
   const [products, setProducts] = useState([]);
-  const [pagination, setPagination] = useState({});
+  const [paginationData, setPaginationData] = useState({});
   const [filters, setFilters] = useState({});
-  const [appliedFilters, setAppliedFilters] = useState({
-    search: '',
-    brand: '',
-    min_price: '',
-    max_price: '',
-    sort_by: 'created_at',
-    sort_order: 'desc'
-  });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Extraction des filtres pour l'API (sans page et per_page) - MEMOIZED
+  const apiFilters = useMemo(() => ({
+    search: urlState.search,
+    brand: urlState.brand,
+    min_price: urlState.min_price,
+    max_price: urlState.max_price,
+    sort_by: urlState.sort_by,
+    sort_order: urlState.sort_order
+  }), [
+    urlState.search,
+    urlState.brand,
+    urlState.min_price,
+    urlState.max_price,
+    urlState.sort_by,
+    urlState.sort_order
+  ]);
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
     setError("");
 
     try {
-      const result = await getPublicProducts(currentPage, perPage, appliedFilters);
+      const result = await getPublicProducts(
+        pagination.currentPage, 
+        pagination.perPage, 
+        apiFilters
+      );
       
       if (result.success) {
         setProducts(result.data);
-        setPagination(result.pagination);
+        setPaginationData(result.pagination);
         setFilters(result.filters);
       } else {
         setError(result.error || "Erreur lors du chargement des produits");
@@ -46,31 +65,20 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, perPage, appliedFilters]);
+  }, [pagination.currentPage, pagination.perPage, apiFilters]);
 
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
 
-  const handleSearch = (searchTerm) => {
-    setAppliedFilters(prev => ({ ...prev, search: searchTerm }));
-    setCurrentPage(1);
-  };
+  // Handlers pour les composants enfants - MEMOIZED
+  const handleSearch = useCallback((search) => {
+    updateUrlState({ search, page: 1 });
+  }, [updateUrlState]);
 
-  const handleFiltersChange = (newFilters) => {
-    setAppliedFilters(prev => ({ ...prev, ...newFilters }));
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handlePerPageChange = (newPerPage) => {
-    setPerPage(newPerPage);
-    setCurrentPage(1);
-  };
+  const handleFiltersChange = useCallback((newFilters) => {
+    updateUrlState({ ...newFilters, page: 1 });
+  }, [updateUrlState]);
 
   return (
     <div className="products-page">
@@ -103,7 +111,7 @@ export default function ProductsPage() {
               <SearchBar
                 onSearch={handleSearch}
                 placeholder="Rechercher par nom, marque ou référence..."
-                initialValue={appliedFilters.search}
+                initialValue={urlState.search}
               />
             </div>
 
@@ -111,7 +119,7 @@ export default function ProductsPage() {
             <ProductFilters
               filters={filters}
               onFiltersChange={handleFiltersChange}
-              appliedFilters={appliedFilters}
+              appliedFilters={apiFilters}
             />
 
             {/* Résultats */}
@@ -138,9 +146,9 @@ export default function ProductsPage() {
                     </div>
 
                     <PublicPagination
-                      pagination={pagination}
-                      onPageChange={handlePageChange}
-                      onPerPageChange={handlePerPageChange}
+                      pagination={paginationData}
+                      onPageChange={pagination.handlePageChange}
+                      onPerPageChange={pagination.handlePerPageChange}
                     />
                   </>
                 ) : (

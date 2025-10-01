@@ -25,7 +25,7 @@ class ProductController extends Controller
         $maxPrice = $request->get('max_price');
 
         // Validation des paramètres
-        $perPage = min(max((int)$perPage, 1), 24); // Entre 1 et 24 pour le client
+        $perPage = min(max((int)$perPage, 1), 48); // Entre 1 et 24 pour le client
         $sortOrder = in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'desc';
         $allowedSortFields = ['name', 'price', 'brand', 'created_at'];
         $sortBy = in_array($sortBy, $allowedSortFields) ? $sortBy : 'created_at';

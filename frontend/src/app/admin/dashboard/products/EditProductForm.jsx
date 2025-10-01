@@ -1,21 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import WysiwygEditor from '../../../../components/WysiwygEditor';
 
-export default function EditProductForm({ product, onSave, onCancel, isLoading }) {
+const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => {
   const [formData, setFormData] = useState({
-    name: product.name || "",
-    price: product.price || "",
-    reference: product.reference || "",
-    brand: product.brand || "",
-    quantity: product.quantity || "",
+    name: '',
+    price: '',
+    reference: '',
+    brand: '',
+    description: '',
+    quantity: ''
   });
-
   const [selectedImage, setSelectedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(
-    product.image ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${product.image}` : null
-  );
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name || '',
+        price: product.price || '',
+        reference: String(product.reference || ''),
+        brand: product.brand || '',
+        description: product.description || '',
+        quantity: product.quantity || ''
+      });
+    }
+  }, [product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,25 +44,31 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
     }
   };
 
+  const handleDescriptionChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      description: value
+    }));
+    
+    // Effacer l'erreur pour la description
+    if (errors.description) {
+      setErrors(prev => ({
+        ...prev,
+        description: ""
+      }));
+    }
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      
-      // Créer un aperçu de l'image
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      
-      // Effacer l'erreur d'image
-      if (errors.image) {
-        setErrors(prev => ({
-          ...prev,
-          image: ""
-        }));
-      }
+    setSelectedImage(file);
+    
+    // Effacer l'erreur pour l'image
+    if (errors.image) {
+      setErrors(prev => ({
+        ...prev,
+        image: ""
+      }));
     }
   };
 
@@ -66,8 +83,10 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
       newErrors.price = "Le prix doit être supérieur à 0";
     }
 
-    if (!formData.reference || parseInt(formData.reference) <= 0) {
-      newErrors.reference = "La référence doit être un nombre positif";
+    if (!formData.reference || !formData.reference.trim()) {
+      newErrors.reference = "La référence est obligatoire";
+    } else if (formData.reference.length > 100) {
+      newErrors.reference = "La référence ne peut pas dépasser 100 caractères";
     }
 
     if (!formData.brand.trim()) {
@@ -95,95 +114,43 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (validateForm()) {
-      // Créer FormData pour gérer les fichiers
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
       const formDataToSend = new FormData();
-      
-      // Ajouter les données du formulaire
       formDataToSend.append('name', formData.name);
       formDataToSend.append('price', parseFloat(formData.price));
-      formDataToSend.append('reference', parseInt(formData.reference));
+      formDataToSend.append('reference', formData.reference); // Envoi comme string
       formDataToSend.append('brand', formData.brand);
+      formDataToSend.append('description', formData.description);
       formDataToSend.append('quantity', parseInt(formData.quantity));
       
-      // Ajouter l'image si sélectionnée
       if (selectedImage) {
         formDataToSend.append('image', selectedImage);
       }
-      
-      onSave(formDataToSend);
+
+      await onSubmit(formDataToSend);
+    } catch (error) {
+      console.error('Erreur lors de la modification:', error);
     }
   };
 
-  return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000
-    }}>
-      <div style={{
-        backgroundColor: "white",
-        padding: "30px",
-        borderRadius: "8px",
-        width: "90%",
-        maxWidth: "500px",
-        maxHeight: "90vh",
-        overflow: "auto"
-      }}>
-        <h2 style={{ marginBottom: "20px" }}>Modifier le produit</h2>
-        
-        <form onSubmit={handleSubmit}>
-          {/* Image actuelle et upload */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
-              Image du produit
-            </label>
-            
-            {/* Aperçu de l'image */}
-            {imagePreview && (
-              <div style={{ marginBottom: "10px" }}>
-                <img 
-                  src={imagePreview} 
-                  alt="Aperçu du produit" 
-                  style={{ 
-                    width: "100px", 
-                    height: "100px", 
-                    objectFit: "cover", 
-                    borderRadius: "4px",
-                    border: "1px solid #ddd"
-                  }} 
-                />
-              </div>
-            )}
-            
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
-              onChange={handleImageChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.image ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
-              disabled={isLoading}
-            />
-            {errors.image && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.image}</span>
-            )}
-          </div>
+  if (!product) {
+    return <div>Chargement...</div>;
+  }
 
-          {/* Nom du produit */}
+  return (
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
+      <h2 style={{ marginBottom: "30px", color: "#333" }}>Modifier le produit</h2>
+      
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          {/* Nom */}
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Nom du produit *
@@ -236,10 +203,11 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
               Référence *
             </label>
             <input
-              type="number"
+              type="text"
               name="reference"
               value={formData.reference}
               onChange={handleChange}
+              placeholder="Ex: REF-12345 ou 34009359558381774632039"
               style={{
                 width: "100%",
                 padding: "8px",
@@ -286,6 +254,7 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
               name="quantity"
               value={formData.quantity}
               onChange={handleChange}
+              min="0"
               style={{
                 width: "100%",
                 padding: "8px",
@@ -299,39 +268,101 @@ export default function EditProductForm({ product, onSave, onCancel, isLoading }
             )}
           </div>
 
-          <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              disabled={isLoading}
+          {/* Image */}
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+              Image du produit
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
               style={{
-                padding: "10px 20px",
-                border: "1px solid #ddd",
-                backgroundColor: "#f8f9fa",
-                borderRadius: "4px",
-                cursor: isLoading ? "not-allowed" : "pointer"
+                width: "100%",
+                padding: "8px",
+                border: errors.image ? "1px solid #dc3545" : "1px solid #ddd",
+                borderRadius: "4px"
               }}
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
               disabled={isLoading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.6 : 1
-              }}
-            >
-              {isLoading ? "Enregistrement..." : "Enregistrer"}
-            </button>
+            />
+            {errors.image && (
+              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.image}</span>
+            )}
+            {selectedImage && (
+              <div style={{ marginTop: "10px" }}>
+                <p style={{ fontSize: "14px", color: "#666" }}>
+                  Nouveau fichier sélectionné: {selectedImage.name}
+                </p>
+              </div>
+            )}
+            {product.image && !selectedImage && (
+              <div style={{ marginTop: "10px" }}>
+                <p style={{ fontSize: "14px", color: "#666" }}>
+                  Image actuelle: {product.image}
+                </p>
+              </div>
+            )}
           </div>
-        </form>
-      </div>
+        </div>
+
+        {/* Description WYSIWYG */}
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ display: "block", marginBottom: "10px", fontWeight: "bold" }}>
+            Description du produit
+          </label>
+          <div style={{ 
+            border: errors.description ? "1px solid #dc3545" : "1px solid #ddd",
+            borderRadius: "4px",
+            minHeight: "200px"
+          }}>
+            <WysiwygEditor
+              value={formData.description}
+              onChange={handleDescriptionChange}
+              placeholder="Décrivez votre produit..."
+            />
+          </div>
+          {errors.description && (
+            <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.description}</span>
+          )}
+        </div>
+
+        <div style={{ display: "flex", gap: "10px", alignSelf: "flex-start" }}>
+          <button
+            type="submit"
+            disabled={isLoading}
+            style={{
+              backgroundColor: isLoading ? "#6c757d" : "#28a745",
+              color: "white",
+              padding: "12px 24px",
+              border: "none",
+              borderRadius: "4px",
+              fontSize: "16px",
+              cursor: isLoading ? "not-allowed" : "pointer"
+            }}
+          >
+            {isLoading ? "Modification en cours..." : "Modifier le produit"}
+          </button>
+          
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isLoading}
+            style={{
+              backgroundColor: "#6c757d",
+              color: "white",
+              padding: "12px 24px",
+              border: "none",
+              borderRadius: "4px",
+              fontSize: "16px",
+              cursor: isLoading ? "not-allowed" : "pointer"
+            }}
+          >
+            Annuler
+          </button>
+        </div>
+      </form>
     </div>
   );
-}
+};
+
+export default EditProductForm;

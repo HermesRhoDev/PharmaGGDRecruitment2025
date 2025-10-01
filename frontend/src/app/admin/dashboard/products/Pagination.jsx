@@ -71,7 +71,7 @@ export default function Pagination({ pagination, onPageChange, onPerPageChange }
               padding: "6px 12px",
               border: "1px solid #ddd",
               backgroundColor: current_page === 1 ? "#f8f9fa" : "white",
-              color: current_page === 1 ? "#6c757d" : "#007bff",
+              color: current_page === 1 ? "#6c757d" : "#10a666",
               borderRadius: "4px",
               cursor: current_page === 1 ? "not-allowed" : "pointer",
               fontSize: "14px"
@@ -88,7 +88,7 @@ export default function Pagination({ pagination, onPageChange, onPerPageChange }
               padding: "6px 12px",
               border: "1px solid #ddd",
               backgroundColor: current_page === 1 ? "#f8f9fa" : "white",
-              color: current_page === 1 ? "#6c757d" : "#007bff",
+              color: current_page === 1 ? "#6c757d" : "#10a666",
               borderRadius: "4px",
               cursor: current_page === 1 ? "not-allowed" : "pointer",
               fontSize: "14px"
@@ -105,8 +105,8 @@ export default function Pagination({ pagination, onPageChange, onPerPageChange }
               style={{
                 padding: "6px 12px",
                 border: "1px solid #ddd",
-                backgroundColor: pageNum === current_page ? "#007bff" : "white",
-                color: pageNum === current_page ? "white" : "#007bff",
+                backgroundColor: pageNum === current_page ? "#10a666" : "white",
+                color: pageNum === current_page ? "white" : "#10a666",
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontSize: "14px",
@@ -125,7 +125,7 @@ export default function Pagination({ pagination, onPageChange, onPerPageChange }
               padding: "6px 12px",
               border: "1px solid #ddd",
               backgroundColor: current_page === last_page ? "#f8f9fa" : "white",
-              color: current_page === last_page ? "#6c757d" : "#007bff",
+              color: current_page === last_page ? "#6c757d" : "#10a666",
               borderRadius: "4px",
               cursor: current_page === last_page ? "not-allowed" : "pointer",
               fontSize: "14px"
@@ -142,7 +142,7 @@ export default function Pagination({ pagination, onPageChange, onPerPageChange }
               padding: "6px 12px",
               border: "1px solid #ddd",
               backgroundColor: current_page === last_page ? "#f8f9fa" : "white",
-              color: current_page === last_page ? "#6c757d" : "#007bff",
+              color: current_page === last_page ? "#6c757d" : "#10a666",
               borderRadius: "4px",
               cursor: current_page === last_page ? "not-allowed" : "pointer",
               fontSize: "14px"

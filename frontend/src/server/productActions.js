@@ -85,12 +85,6 @@ export async function updateProduct(productId, productData) {
             throw new Error("Non authentifié")
         }
 
-        console.log("=== DEBUG UPDATE PRODUCT ===")
-        console.log("Product ID:", productId)
-        console.log("Product Data:", productData)
-        console.log("URL:", `${process.env.BACKEND_URL}/admin/products/${productId}`)
-        console.log("Token:", session.user.laravelAccessToken ? "Present" : "Missing")
-
         // Déterminer le type de contenu et les headers
         const isFormData = productData instanceof FormData;
         const headers = {
@@ -120,9 +114,6 @@ export async function updateProduct(productId, productData) {
             body: body,
         })
 
-        console.log("Response Status:", response.status)
-        console.log("Response Headers:", Object.fromEntries(response.headers.entries()))
-
         if (!response.ok) {
             const errorText = await response.text()
             console.error("=== ERROR RESPONSE ===")
@@ -140,9 +131,7 @@ export async function updateProduct(productId, productData) {
         }
 
         const data = await response.json()
-        console.log("=== SUCCESS RESPONSE ===")
-        console.log("Response Data:", data)
-        
+
         return { success: true, data: data.product }
     } catch (error) {
         console.error("=== UPDATE PRODUCT ERROR ===")
@@ -159,11 +148,6 @@ export async function createProduct(productData) {
         if (!session || !session.user?.laravelAccessToken) {
             throw new Error("Non authentifié")
         }
-
-        console.log("=== DEBUG CREATE PRODUCT ===")
-        console.log("Product Data:", productData)
-        console.log("URL:", `${process.env.BACKEND_URL}/admin/products`)
-        console.log("Token:", session.user.laravelAccessToken ? "Present" : "Missing")
 
         // Déterminer le type de contenu et les headers
         const isFormData = productData instanceof FormData;
@@ -189,10 +173,6 @@ export async function createProduct(productData) {
             body: body,
         })
 
-        console.log("=== RESPONSE STATUS ===")
-        console.log("Status:", response.status)
-        console.log("Status Text:", response.statusText)
-
         if (!response.ok) {
             const errorText = await response.text()
             console.error("=== ERROR RESPONSE ===")
@@ -210,8 +190,6 @@ export async function createProduct(productData) {
         }
 
         const data = await response.json()
-        console.log("=== SUCCESS RESPONSE ===")
-        console.log("Response Data:", data)
         
         return { success: true, data: data.product }
     } catch (error) {

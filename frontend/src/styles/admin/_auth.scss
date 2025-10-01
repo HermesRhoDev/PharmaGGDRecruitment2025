@@ -1,17 +1,14 @@
-@use 'variables' as *;
-@use 'sass:color';
-
 .login-page {
   @include flex-center;
   min-height: 100vh;
   padding: 3rem 1rem;
 
   &.admin {
-    background-color: color.mix($secondary-color, $white, 10%);
+    background-color: rgba($secondary-color, 0.1);
   }
 
   &.user {
-    background-color: color.mix($primary-color, $white, 10%);
+    background-color: rgba($primary-color, 0.1);
   }
 }
 
@@ -49,9 +46,9 @@
   @include card;
   
   .error-message {
-    background-color: color.mix($secondary-color, $white, 10%);
-    border: 1px solid color.mix($secondary-color, $white, 30%);
-    color: color.adjust($secondary-color, $lightness: 10%);
+    background-color: rgba($secondary-color, 0.1);
+    border: 1px solid rgba($secondary-color, 0.3);
+    color: $secondary-light;
     padding: 0.75rem 1rem;
     border-radius: 6px;
     margin-bottom: 1rem;

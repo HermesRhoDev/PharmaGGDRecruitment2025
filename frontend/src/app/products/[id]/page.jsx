@@ -9,7 +9,6 @@ import ProductCard from "App/components/ProductCard";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import "App/styles/product-detail.scss";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -139,9 +138,8 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    // Fonction factice pour le moment
     if (product.quantity > 0) {
-      alert("Produit ajouté au panier !");
+      alert("Produit ajouté au panier ! (c'est juste une simulation)"); 
     }
   };
 
@@ -276,12 +274,12 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <div className="product-info">
+            <div className="product-info-detail">
               <div className="product-header-info">
                 <h1 className="product-title">{product.name}</h1>
                 <p className="product-brand">{product.brand}</p>
                 <p className="product-reference">
-                  Référence: {product.reference}
+                  Référence: {String(product.reference)}
                 </p>
               </div>
 
@@ -308,7 +306,7 @@ export default function ProductDetailPage() {
                   {product.quantity > 0 ? (
                     <>
                       <svg
-                        class="w-6 h-6 text-white"
+                        className="w-6 h-6 text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -317,9 +315,9 @@ export default function ProductDetailPage() {
                         viewBox="0 0 24 24">
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4"
                         />
                       </svg>

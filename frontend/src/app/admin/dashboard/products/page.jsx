@@ -6,21 +6,6 @@ import ProductForm from "./ProductForm";
 import Pagination from "./Pagination";
 import ProductFilters from "./ProductFilters";
 import AdminLayout from "../../../../components/AdminLayout";
-import "../../../styles/admin/product.scss";
-
-// Fonction utilitaire pour supprimer les balises HTML
-const stripHtml = (html) => {
-  if (!html) return '';
-  return html.replace(/<[^>]*>/g, '');
-};
-
-// Fonction utilitaire pour tronquer le texte
-const truncateDescription = (text, maxLength = 120) => {
-  if (!text) return '';
-  const stripped = stripHtml(text);
-  if (stripped.length <= maxLength) return stripped;
-  return stripped.substring(0, maxLength).trim() + '...';
-};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -186,7 +171,7 @@ export default function ProductsPage() {
         <ProductFilters
           filters={filters}
           onFiltersChange={handleFiltersChange}
-          onFiltersReset={handleFiltersReset}
+          onReset={handleFiltersReset}
         />
 
         {/* États de chargement et d'erreur */}
@@ -213,15 +198,7 @@ export default function ProductsPage() {
                     <h3 className="product-name">{product.name}</h3>
                     <p className="product-brand">{product.brand}</p>
                     <p className="product-price">{product.price} €</p>
-                    <p className="product-reference">Réf: {product.reference}</p>
-                    
-                    {/* Description du produit */}
-                    {product.description && (
-                      <div className="product-description">
-                        {truncateDescription(product.description)}
-                      </div>
-                    )}
-                    
+                    <p className="product-reference">Réf: {String(product.reference)}</p>
                     <p className={`product-stock ${product.quantity <= 5 ? 'low-stock' : product.quantity <= 10 ? 'medium-stock' : 'high-stock'}`}>
                       Stock: {product.quantity}
                     </p>
