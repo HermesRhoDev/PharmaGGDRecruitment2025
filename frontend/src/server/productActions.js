@@ -2,7 +2,7 @@
 
 import { adminAuth } from "App/lib/auth-admin"
 
-export async function getProducts(page = 1, perPage = 10) {
+export async function getProducts(page = 1, perPage = 10, filters = {}) {
     try {
         // Récupérer la session admin
         const session = await adminAuth()
@@ -14,6 +14,13 @@ export async function getProducts(page = 1, perPage = 10) {
         const url = new URL(`${process.env.BACKEND_URL}/admin/products`)
         url.searchParams.append('page', page.toString())
         url.searchParams.append('per_page', perPage.toString())
+        
+        // Ajouter les filtres à l'URL
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && value !== '') {
+                url.searchParams.append(key, value.toString())
+            }
+        })
 
         const response = await fetch(url.toString(), {
             headers: {
@@ -28,11 +35,12 @@ export async function getProducts(page = 1, perPage = 10) {
         }
 
         const data = await response.json()
-        // Retourner les produits et les informations de pagination
+        // Retourner les produits, les informations de pagination et les filtres
         return { 
             success: true, 
             data: data.products,
-            pagination: data.pagination
+            pagination: data.pagination,
+            filters: data.filters
         }
     } catch (error) {
         return { success: false, error: error.message }

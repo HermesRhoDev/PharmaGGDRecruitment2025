@@ -19,11 +19,68 @@ class ProductController extends Controller
         $perPage = $request->get('per_page', 10); // Par défaut 10 produits par page
         $page = $request->get('page', 1);
 
+        // Paramètres de recherche et filtrage
+        $search = $request->get('search');
+        $brand = $request->get('brand');
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $minPrice = $request->get('min_price');
+        $maxPrice = $request->get('max_price');
+        $minQuantity = $request->get('min_quantity');
+        $maxQuantity = $request->get('max_quantity');
+
         // Validation des paramètres
         $perPage = min(max((int)$perPage, 1), 100); // Entre 1 et 100
+        $sortOrder = in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'desc';
+        $allowedSortFields = ['name', 'price', 'reference', 'brand', 'quantity', 'created_at'];
+        $sortBy = in_array($sortBy, $allowedSortFields) ? $sortBy : 'created_at';
 
-        $products = Product::orderBy('created_at', 'desc')
-            ->paginate($perPage, ['*'], 'page', $page);
+        // Construction de la requête
+        $query = Product::query();
+
+        // Recherche textuelle (nom, marque, référence)
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('brand', 'LIKE', "%{$search}%")
+                  ->orWhere('reference', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Filtrage par marque
+        if ($brand) {
+            $query->where('brand', 'LIKE', "%{$brand}%");
+        }
+
+        // Filtrage par prix
+        if ($minPrice !== null && is_numeric($minPrice)) {
+            $query->where('price', '>=', (float)$minPrice);
+        }
+        if ($maxPrice !== null && is_numeric($maxPrice)) {
+            $query->where('price', '<=', (float)$maxPrice);
+        }
+
+        // Filtrage par quantité
+        if ($minQuantity !== null && is_numeric($minQuantity)) {
+            $query->where('quantity', '>=', (int)$minQuantity);
+        }
+        if ($maxQuantity !== null && is_numeric($maxQuantity)) {
+            $query->where('quantity', '<=', (int)$maxQuantity);
+        }
+
+        // Tri
+        $query->orderBy($sortBy, $sortOrder);
+
+        // Pagination
+        $products = $query->paginate($perPage, ['*'], 'page', $page);
+
+        // Récupérer les marques uniques pour les filtres
+        $brands = Product::select('brand')
+            ->distinct()
+            ->whereNotNull('brand')
+            ->where('brand', '!=', '')
+            ->orderBy('brand')
+            ->pluck('brand');
 
         return response()->json([
             'message' => 'Products retrieved successfully',
@@ -38,6 +95,19 @@ class ProductController extends Controller
                 'has_more_pages' => $products->hasMorePages(),
                 'next_page_url' => $products->nextPageUrl(),
                 'prev_page_url' => $products->previousPageUrl()
+            ],
+            'filters' => [
+                'brands' => $brands,
+                'applied_filters' => [
+                    'search' => $search,
+                    'brand' => $brand,
+                    'sort_by' => $sortBy,
+                    'sort_order' => $sortOrder,
+                    'min_price' => $minPrice,
+                    'max_price' => $maxPrice,
+                    'min_quantity' => $minQuantity,
+                    'max_quantity' => $maxQuantity
+                ]
             ]
         ]);
     }

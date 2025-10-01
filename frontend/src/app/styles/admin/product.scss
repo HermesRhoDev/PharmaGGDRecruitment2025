@@ -1,0 +1,333 @@
+// Variables SCSS
+$primary-color: #28a745;
+$primary-hover: #218838;
+$danger-color: #dc3545;
+$danger-hover: #c82333;
+$border-color: #dee2e6;
+$text-muted: #6c757d;
+$white: white;
+
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+$box-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+$grid-gap: 15px;
+$card-padding: 15px;
+$button-padding: 8px 16px;
+
+$font-size-base: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-sm: 12px;
+
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1200px;
+
+// Mixins
+@mixin button-base {
+  border: none;
+  padding: $button-padding;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  font-size: $font-size-base;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@mixin button-variant($bg-color, $hover-color) {
+  @include button-base;
+  background-color: $bg-color;
+  color: $white;
+
+  &:hover:not(:disabled) {
+    background-color: $hover-color;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin grid-responsive($mobile: 1fr, $tablet: 1fr 1fr, $desktop: 1fr 1fr 1fr) {
+  display: grid;
+  grid-template-columns: $tablet;
+  gap: $grid-gap;
+
+  @media (max-width: $breakpoint-mobile) {
+    grid-template-columns: $mobile;
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    grid-template-columns: $desktop;
+  }
+}
+
+// Styles pour la liste des produits
+.products-grid {
+  @include grid-responsive();
+  margin-bottom: 20px;
+}
+
+.product-card {
+  border: 1px solid $border-color;
+  padding: $card-padding;
+  border-radius: $border-radius;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: $box-shadow-hover;
+  }
+}
+
+.product-header {
+  @include flex-center;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-size: $font-size-lg;
+  font-weight: bold;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.product-price {
+  font-size: $font-size-xl;
+  color: $primary-color;
+  font-weight: bold;
+}
+
+.product-info {
+  font-size: $font-size-base;
+  color: $text-muted;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+  &-full {
+    grid-column: 1 / -1;
+  }
+}
+
+// Stock status styles
+%stock-base {
+  font-weight: bold;
+}
+
+.stock-low {
+  @extend %stock-base;
+  color: $danger-color;
+}
+
+.stock-normal {
+  @extend %stock-base;
+  color: $primary-color;
+}
+
+.stock-warning {
+  color: $danger-color;
+  font-size: $font-size-sm;
+  margin-left: 5px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+// Buttons
+.btn {
+  &-edit {
+    @include button-variant($primary-color, $primary-hover);
+  }
+
+  &-delete {
+    @include button-variant($danger-color, $danger-hover);
+  }
+}
+
+// Styles pour les filtres
+.product-filters {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: $border-radius;
+  margin-bottom: 20px;
+  border: 1px solid $border-color;
+
+  &__title {
+    margin-bottom: 15px;
+    color: #495057;
+    font-size: $font-size-lg;
+    font-weight: bold;
+  }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $grid-gap;
+    margin-bottom: 15px;
+
+    @media (max-width: $breakpoint-mobile) {
+      gap: 10px;
+    }
+  }
+
+  &__field {
+    flex: 1;
+    min-width: 180px;
+    max-width: 280px;
+
+    // Mobile : 1 filtre par ligne
+    @media (max-width: $breakpoint-mobile) {
+      min-width: 100%;
+      max-width: 100%;
+      flex: none;
+    }
+
+    // Tablette : 2 filtres par ligne
+    @media (min-width: #{$breakpoint-mobile + 1px}) and (max-width: $breakpoint-tablet) {
+      min-width: calc(50% - #{$grid-gap / 2});
+      max-width: calc(50% - #{$grid-gap / 2});
+      flex: none;
+    }
+
+    // Desktop moyen : 3 filtres par ligne (pour que stock passe en dessous)
+    @media (min-width: #{$breakpoint-tablet + 1px}) and (max-width: 1100px) {
+      min-width: calc(33.333% - #{$grid-gap * 2 / 3});
+      max-width: calc(33.333% - #{$grid-gap * 2 / 3});
+      flex: none;
+    }
+
+    // Grand desktop : 4-5 filtres par ligne selon l'espace
+    @media (min-width: 1101px) {
+      min-width: 180px;
+      max-width: 280px;
+      flex: 1;
+    }
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: $font-size-base;
+    color: #495057;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  &__select {
+    @extend .product-filters__input;
+    cursor: pointer;
+  }
+
+  &__range {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    input {
+      //   flex: 1;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ced4da;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-base;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      }
+    }
+
+    span {
+      color: $text-muted;
+      font-size: $font-size-base;
+      white-space: nowrap;
+    }
+  }
+
+  &__sort {
+    display: flex;
+    gap: 5px;
+
+    select:first-child {
+      flex: 2;
+    }
+
+    select:last-child {
+      flex: 1;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    @media (max-width: $breakpoint-mobile) {
+      flex-direction: column;
+    }
+  }
+
+  &__btn {
+    @include button-base;
+    font-weight: bold;
+
+    &--primary {
+      background-color: #007bff;
+      color: $white;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+
+    &--secondary {
+      background-color: $text-muted;
+      color: $white;
+
+      &:hover {
+        background-color: #545b62;
+      }
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
