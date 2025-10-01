@@ -291,7 +291,7 @@ export default function ProductDetailPage() {
                   {product.quantity > 0 ? (
                     <span className="in-stock">✓ En stock</span>
                   ) : (
-                    <span className="out-of-stock">✗ Rupture de stock</span>
+                    <span className="out-of-stock">✗ Bientôt de retour</span>
                   )}
                 </div>
               </div>

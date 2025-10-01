@@ -30,8 +30,8 @@ class ProductController extends Controller
         $allowedSortFields = ['name', 'price', 'brand', 'created_at'];
         $sortBy = in_array($sortBy, $allowedSortFields) ? $sortBy : 'created_at';
 
-        // Construction de la requête - seulement les produits avec quantité > 0
-        $query = Product::where('quantity', '>', 0);
+        // Construction de la requête - inclure tous les produits (même hors stock)
+        $query = Product::query();
 
         // Recherche textuelle (nom, marque, référence)
         if ($search) {
@@ -62,10 +62,9 @@ class ProductController extends Controller
         // Pagination
         $products = $query->paginate($perPage, ['*'], 'page', $page);
 
-        // Récupérer les marques uniques pour les filtres (seulement celles avec stock)
+        // Récupérer les marques uniques pour les filtres (toutes les marques)
         $brands = Product::select('brand')
             ->distinct()
-            ->where('quantity', '>', 0)
             ->whereNotNull('brand')
             ->where('brand', '!=', '')
             ->orderBy('brand')
@@ -116,12 +115,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): JsonResponse
     {
-        // Vérifier que le produit est en stock
-        if ($product->quantity <= 0) {
-            return response()->json([
-                'message' => 'Product not available'
-            ], 404);
-        }
+        // Supprimer la vérification du stock pour permettre l'affichage des produits hors stock
 
         // Ajouter l'URL complète de l'image
         if ($product->image) {

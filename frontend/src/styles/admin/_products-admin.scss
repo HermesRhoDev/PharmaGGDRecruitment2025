@@ -442,7 +442,7 @@
     margin-top: auto;
 
     .btn-edit {
-      @include button-variant($primary-color, $primary-dark);
+      @include button-variant($yellow-500, $yellow-600);
       flex: 1;
       font-size: 12px;
       padding: 6px 12px;
