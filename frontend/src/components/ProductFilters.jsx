@@ -40,7 +40,7 @@ export default function ProductFilters({ filters, onFiltersChange, appliedFilter
 
       <div className="filters-content open">
         <div className="filters-grid">
-          {/* Tri */}
+          {/* Sorting */}
           <div className="filter-group">
             <label htmlFor="sort_by">Trier par</label>
             <select
@@ -69,7 +69,7 @@ export default function ProductFilters({ filters, onFiltersChange, appliedFilter
             </select>
           </div>
 
-          {/* Marque */}
+          {/* Brand */}
           {filters?.brands && filters.brands.length > 0 && (
             <div className="filter-group">
               <label htmlFor="brand">Marque</label>
@@ -89,7 +89,7 @@ export default function ProductFilters({ filters, onFiltersChange, appliedFilter
             </div>
           )}
 
-          {/* Prix */}
+          {/* Price Range */}
           <div className="filter-group">
             <label htmlFor="min_price">Prix minimum</label>
             <input

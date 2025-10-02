@@ -21,7 +21,6 @@ export default function AdminLoginPage() {
 			if (result?.error) {
 				setError("Email ou mot de passe incorrect")
 			} else {
-				// Redirection sera gérée par le middleware
 				redirect("/admin/dashboard")
 			}
 		} catch (err) {

@@ -4,7 +4,7 @@ import { adminAuth } from "App/lib/auth-admin"
 
 export async function getProducts(page = 1, perPage = 10, filters = {}) {
     try {
-        // Récupérer la session admin
+        // Get admin session
         const session = await adminAuth()
         
         if (!session || !session.user?.laravelAccessToken) {
@@ -15,7 +15,7 @@ export async function getProducts(page = 1, perPage = 10, filters = {}) {
         url.searchParams.append('page', page.toString())
         url.searchParams.append('per_page', perPage.toString())
         
-        // Ajouter les filtres à l'URL
+        // Add filters to URL
         Object.entries(filters).forEach(([key, value]) => {
             if (value !== null && value !== undefined && value !== '') {
                 url.searchParams.append(key, value.toString())
@@ -35,7 +35,7 @@ export async function getProducts(page = 1, perPage = 10, filters = {}) {
         }
 
         const data = await response.json()
-        // Retourner les produits, les informations de pagination et les filtres
+        // Return products, pagination info, and filters    
         return { 
             success: true, 
             data: data.products,
@@ -49,7 +49,7 @@ export async function getProducts(page = 1, perPage = 10, filters = {}) {
 
 export async function deleteProduct(productId) {
     try {
-        // Récupérer la session admin
+        // Get admin session
         const session = await adminAuth()
         
         if (!session || !session.user?.laravelAccessToken) {
@@ -78,14 +78,14 @@ export async function deleteProduct(productId) {
 
 export async function updateProduct(productId, productData) {
     try {
-        // Récupérer la session admin
+        // Get admin session
         const session = await adminAuth()
         
         if (!session || !session.user?.laravelAccessToken) {
             throw new Error("Non authentifié")
         }
 
-        // Déterminer le type de contenu et les headers
+        // Determine content type and headers
         const isFormData = productData instanceof FormData;
         const headers = {
             Accept: "application/json",
@@ -96,13 +96,12 @@ export async function updateProduct(productId, productData) {
         let method;
 
         if (isFormData) {
-            // Pour FormData, utiliser POST avec _method=PUT
+            // FormData: use POST with _method=PUT
             productData.append('_method', 'PUT');
             body = productData;
             method = "POST";
-            // Ne pas ajouter Content-Type pour FormData
         } else {
-            // Pour JSON, utiliser PUT normal
+            // JSON: use normal PUT
             headers["Content-Type"] = "application/json";
             body = JSON.stringify(productData);
             method = "PUT";
@@ -121,7 +120,7 @@ export async function updateProduct(productId, productData) {
             console.error("Status Text:", response.statusText)
             console.error("Error Body:", errorText)
             
-            // Essayer de parser le JSON d'erreur
+            // Try to parse JSON error body
             try {
                 const errorJson = JSON.parse(errorText)
                 throw new Error(`Erreur ${response.status}: ${JSON.stringify(errorJson, null, 2)}`)
@@ -142,14 +141,14 @@ export async function updateProduct(productId, productData) {
 
 export async function createProduct(productData) {
     try {
-        // Récupérer la session admin
+        // Get admin session
         const session = await adminAuth()
         
         if (!session || !session.user?.laravelAccessToken) {
             throw new Error("Non authentifié")
         }
 
-        // Déterminer le type de contenu et les headers
+        // Determine content type and headers   
         const isFormData = productData instanceof FormData;
         const headers = {
             Accept: "application/json",
@@ -159,10 +158,10 @@ export async function createProduct(productData) {
         let body;
 
         if (isFormData) {
-            // Pour FormData, ne pas ajouter Content-Type
+            // FormData: don't add Content-Type
             body = productData;
         } else {
-            // Pour JSON
+            // JSON: use normal POST
             headers["Content-Type"] = "application/json";
             body = JSON.stringify(productData);
         }
@@ -180,7 +179,7 @@ export async function createProduct(productData) {
             console.error("Status Text:", response.statusText)
             console.error("Error Body:", errorText)
             
-            // Essayer de parser le JSON d'erreur
+            // Try to parse JSON error body
             try {
                 const errorJson = JSON.parse(errorText)
                 throw new Error(`Erreur ${response.status}: ${JSON.stringify(errorJson, null, 2)}`)

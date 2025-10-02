@@ -4,12 +4,10 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 /**
- * Hook personnalisé pour gérer l'état dans les URL Search Params
- * Suit le principe de responsabilité unique (SRP) - gère uniquement la synchronisation URL/état
- * Suit le principe ouvert/fermé (OCP) - extensible via la configuration
+ * Custom hook for managing state in URL Search Params
  * 
- * @param {Object} defaultState - État par défaut
- * @param {Object} config - Configuration optionnelle
+ * @param {Object} defaultState - Default state
+ * @param {Object} config - Optional configuration
  * @returns {Array} [state, setState, resetState]
  */
 export function useUrlState(defaultState = {}, config = {}) {
@@ -18,25 +16,25 @@ export function useUrlState(defaultState = {}, config = {}) {
   const searchParams = useSearchParams();
   
   const {
-    // Transformateurs pour encoder/décoder les valeurs
+    // Transformers for encoding/decoding values
     serializers = {},
     deserializers = {},
-    // Clés à exclure de l'URL (pour des données sensibles)
+    // Keys to exclude from URL (for sensitive data)
     excludeFromUrl = [],
-    // Debounce pour éviter trop de mises à jour d'URL
+    // Debounce to avoid too many URL updates
     debounceMs = 100
   } = config;
 
-  // État local synchronisé avec l'URL
+  // Local state synchronized with URL
   const [state, setState] = useState(() => {
     return initializeStateFromUrl(searchParams, defaultState, deserializers);
   });
 
-  // Utiliser useRef pour le timeout pour éviter les re-renders
+  // Use ref to store timeout for debouncing URL updates
   const updateTimeoutRef = useRef(null);
 
   /**
-   * Initialise l'état depuis les paramètres URL
+   * Initializes state from URL search params
    */
   function initializeStateFromUrl(searchParams, defaultState, deserializers) {
     const urlState = { ...defaultState };
@@ -45,11 +43,11 @@ export function useUrlState(defaultState = {}, config = {}) {
       const urlValue = searchParams.get(key);
       
       if (urlValue !== null) {
-        // Utilise un désérialiseur personnalisé si disponible
+        // Use custom deserializer if available
         if (deserializers[key]) {
           urlState[key] = deserializers[key](urlValue);
         } else {
-          // Désérialisation automatique basée sur le type par défaut
+          // Automatic deserialization based on default type
           urlState[key] = deserializeValue(urlValue, defaultValue);
         }
       }
@@ -59,7 +57,7 @@ export function useUrlState(defaultState = {}, config = {}) {
   }
 
   /**
-   * Désérialise une valeur selon son type
+   * Deserializes a value based on its type
    */
   function deserializeValue(value, defaultValue) {
     if (typeof defaultValue === 'number') {
@@ -73,7 +71,7 @@ export function useUrlState(defaultState = {}, config = {}) {
   }
 
   /**
-   * Sérialise une valeur pour l'URL
+   * Serializes a value for URL
    */
   function serializeValue(key, value) {
     if (serializers[key]) {
@@ -83,7 +81,7 @@ export function useUrlState(defaultState = {}, config = {}) {
   }
 
   /**
-   * Met à jour l'URL avec le nouvel état
+   * Updates URL with new state 
    */
   const updateUrl = useCallback((newState) => {
     if (updateTimeoutRef.current) {
@@ -94,7 +92,7 @@ export function useUrlState(defaultState = {}, config = {}) {
       const params = new URLSearchParams();
       
       for (const [key, value] of Object.entries(newState)) {
-        // Exclut les clés spécifiées et les valeurs vides/par défaut
+        // Exclude specified keys and default/empty values
         if (
           !excludeFromUrl.includes(key) &&
           value !== '' &&
@@ -115,7 +113,7 @@ export function useUrlState(defaultState = {}, config = {}) {
   }, [pathname, router, excludeFromUrl, serializers, debounceMs]);
 
   /**
-   * Met à jour l'état et l'URL
+   * Updates state and URL with new values  
    */
   const updateState = useCallback((updates) => {
     setState(prevState => {
@@ -129,20 +127,20 @@ export function useUrlState(defaultState = {}, config = {}) {
   }, [updateUrl]);
 
   /**
-   * Remet l'état aux valeurs par défaut
+   * Resets state to default values
    */
   const resetState = useCallback(() => {
     setState(defaultState);
     router.replace(pathname, { scroll: false });
   }, [defaultState, pathname, router]);
 
-  // Synchronise l'état quand les paramètres URL changent (navigation navigateur)
+  // Synchronizes state when URL search params change (browser navigation)
   useEffect(() => {
     const newState = initializeStateFromUrl(searchParams, defaultState, deserializers);
     setState(newState);
   }, [searchParams]);
 
-  // Cleanup du timeout
+  // Cleanup timeout on component unmount
   useEffect(() => {
     return () => {
       if (updateTimeoutRef.current) {
@@ -154,7 +152,7 @@ export function useUrlState(defaultState = {}, config = {}) {
   return [state, updateState, resetState];
 }
 
-// Constantes pour éviter les re-créations
+// Constants to avoid re-creation on each render
 const DEFAULT_FILTERS = {
   search: '',
   brand: '',
@@ -178,8 +176,7 @@ const FILTERS_CONFIG = {
 };
 
 /**
- * Hook spécialisé pour les filtres de produits
- * Suit le principe de substitution de Liskov (LSP) - peut remplacer useUrlState
+ * Specialized hook for product filters state
  */
 export function useProductFiltersState() {
   return useUrlState(DEFAULT_FILTERS, FILTERS_CONFIG);

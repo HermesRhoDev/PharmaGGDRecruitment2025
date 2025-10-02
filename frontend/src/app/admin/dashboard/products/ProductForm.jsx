@@ -8,7 +8,7 @@ export default function ProductForm({
   onSave, 
   onCancel, 
   isLoading, 
-  mode = "edit" // "edit" ou "create"
+  mode = "edit"
 }) {
   const [formData, setFormData] = useState({
     name: product?.name || "",
@@ -32,7 +32,7 @@ export default function ProductForm({
       [name]: value
     }));
     
-    // Effacer l'erreur pour ce champ
+    // Erase error for this field if it exists
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -47,7 +47,7 @@ export default function ProductForm({
       description: value
     }));
     
-    // Effacer l'erreur pour la description
+    // Erase error for description if it exists   
     if (errors.description) {
       setErrors(prev => ({
         ...prev,
@@ -61,14 +61,14 @@ export default function ProductForm({
     if (file) {
       setSelectedImage(file);
       
-      // Créer un aperçu de l'image
+      // Create image preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target.result);
       };
       reader.readAsDataURL(file);
       
-      // Effacer l'erreur d'image
+      // Erase error for image if it exists   
       if (errors.image) {
         setErrors(prev => ({
           ...prev,
@@ -101,7 +101,7 @@ export default function ProductForm({
       newErrors.quantity = "La quantité doit être positive ou nulle";
     }
 
-    // Validation de la description
+    // Description length validation
     if (formData.description) {
       try {
         const parsed = JSON.parse(formData.description);
@@ -110,14 +110,14 @@ export default function ProductForm({
           newErrors.description = "La description ne peut pas dépasser 50000 caractères";
         }
       } catch {
-        // Si ce n'est pas du JSON, vérifier la longueur du texte brut
+        // If not JSON, check raw text length
         if (formData.description.length > 50000) {
           newErrors.description = "La description ne peut pas dépasser 50000 caractères";
         }
       }
     }
 
-    // Validation de l'image
+    // Image validation
     if (selectedImage) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
       if (!allowedTypes.includes(selectedImage.type)) {
@@ -134,7 +134,7 @@ export default function ProductForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Fonction utilitaire pour calculer la longueur du texte dans Slate
+  // Utility function to calculate text length in Slate nodes
   const getTextLength = (nodes) => {
     return nodes.reduce((length, node) => {
       if (node.text !== undefined) {
@@ -150,10 +150,10 @@ export default function ProductForm({
     e.preventDefault();
     
     if (validateForm()) {
-      // Créer FormData pour gérer les fichiers
+      // Create FormData to handle file uploads
       const formDataToSend = new FormData();
       
-      // Ajouter les données du formulaire
+      // Add form data fields
       formDataToSend.append('name', formData.name);
       formDataToSend.append('price', parseFloat(formData.price));
       formDataToSend.append('reference', formData.reference);
@@ -161,7 +161,7 @@ export default function ProductForm({
       formDataToSend.append('quantity', parseInt(formData.quantity));
       formDataToSend.append('description', formData.description || '');
       
-      // Ajouter l'image si sélectionnée
+      // Add image if selected
       if (selectedImage) {
         formDataToSend.append('image', selectedImage);
       }
@@ -175,73 +175,42 @@ export default function ProductForm({
   const loadingText = mode === "create" ? "Création..." : "Enregistrement...";
 
   return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000
-    }}>
-      <div style={{
-        backgroundColor: "white",
-        padding: "30px",
-        borderRadius: "8px",
-        width: "90%",
-        maxWidth: "600px",
-        maxHeight: "90vh",
-        overflow: "auto"
-      }}>
-        <h2 style={{ marginBottom: "20px" }}>{title}</h2>
-        
+    <div className="admin-modal-overlay">
+      <div className="admin-modal">
+        <h2 className="admin-modal__title">{title}</h2>
+
         <form onSubmit={handleSubmit}>
-          {/* Image actuelle et upload */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Current product image and upload */}
+          <div className="form-group">
+            <label className="form-label">
               Image du produit
             </label>
-            
-            {/* Aperçu de l'image */}
+
             {imagePreview && (
-              <div style={{ marginBottom: "10px" }}>
-                <img 
-                  src={imagePreview} 
-                  alt="Aperçu du produit" 
-                  style={{ 
-                    width: "100px", 
-                    height: "100px", 
-                    objectFit: "cover", 
-                    borderRadius: "4px",
-                    border: "1px solid #ddd"
-                  }} 
+              <div className="image-preview">
+                <img
+                  src={imagePreview}
+                  alt="Aperçu du produit"
+                  className="image-preview__img"
                 />
               </div>
             )}
-            
+
             <input
               type="file"
               accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
               onChange={handleImageChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.image ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.image ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.image && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.image}</span>
+              <span className="error-text">{errors.image}</span>
             )}
           </div>
 
-          {/* Nom du produit */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Product name */}
+          <div className="form-group">
+            <label className="form-label">
               Nom du produit *
             </label>
             <input
@@ -249,22 +218,17 @@ export default function ProductForm({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.name ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.name ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.name && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.name}</span>
+              <span className="error-text">{errors.name}</span>
             )}
           </div>
 
           {/* Description */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          <div className="form-group">
+            <label className="form-label">
               Description
             </label>
             <WysiwygEditor
@@ -275,15 +239,15 @@ export default function ProductForm({
               error={errors.description}
             />
             {errors.description && (
-              <span style={{ color: "#dc3545", fontSize: "14px", display: "block", marginTop: "5px" }}>
+              <span className="error-text block">
                 {errors.description}
               </span>
             )}
           </div>
 
-          {/* Prix */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Price */}
+          <div className="form-group">
+            <label className="form-label">
               Prix (€) *
             </label>
             <input
@@ -292,22 +256,17 @@ export default function ProductForm({
               name="price"
               value={formData.price}
               onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.price ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.price ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.price && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.price}</span>
+              <span className="error-text">{errors.price}</span>
             )}
           </div>
 
-          {/* Référence */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Reference */}
+          <div className="form-group">
+            <label className="form-label">
               Référence *
             </label>
             <input
@@ -316,22 +275,17 @@ export default function ProductForm({
               value={formData.reference}
               onChange={handleChange}
               placeholder="Ex: 34009359558381774632039"
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.reference ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.reference ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.reference && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.reference}</span>
+              <span className="error-text">{errors.reference}</span>
             )}
           </div>
 
-          {/* Marque */}
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Brand */}
+          <div className="form-group">
+            <label className="form-label">
               Marque *
             </label>
             <input
@@ -339,22 +293,17 @@ export default function ProductForm({
               name="brand"
               value={formData.brand}
               onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.brand ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.brand ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.brand && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.brand}</span>
+              <span className="error-text">{errors.brand}</span>
             )}
           </div>
 
-          {/* Quantité */}
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+          {/* Quantity */}
+          <div className="form-group form-group--lg">
+            <label className="form-label">
               Quantité en stock *
             </label>
             <input
@@ -362,44 +311,26 @@ export default function ProductForm({
               name="quantity"
               value={formData.quantity}
               onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: errors.quantity ? "1px solid #dc3545" : "1px solid #ddd",
-                borderRadius: "4px"
-              }}
+              className={`input ${errors.quantity ? "has-error" : ""}`}
               disabled={isLoading}
             />
             {errors.quantity && (
-              <span style={{ color: "#dc3545", fontSize: "14px" }}>{errors.quantity}</span>
+              <span className="error-text">{errors.quantity}</span>
             )}
           </div>
 
-          <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+          <div className="form-actions">
             <button
               type="button"
               onClick={onCancel}
-              style={{
-                padding: "10px 20px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                backgroundColor: "white",
-                cursor: "pointer"
-              }}
+              className="btn btn--cancel"
               disabled={isLoading}
             >
               Annuler
             </button>
             <button
               type="submit"
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "4px",
-                backgroundColor: "#0a7a4b",
-                color: "white",
-                cursor: "pointer"
-              }}
+              className="btn btn--submit"
               disabled={isLoading}
             >
               {isLoading ? loadingText : submitText}

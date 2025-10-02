@@ -32,7 +32,7 @@ class ProductController extends Controller
         $sortBy = in_array($sortBy, $allowedSortFields) ? $sortBy : 'created_at';
         $query = Product::query();
 
-        // Recherche textuelle (nom, marque, référence)
+        // Search by name, brand, or reference
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
@@ -41,12 +41,12 @@ class ProductController extends Controller
             });
         }
 
-        // Filtrage par marque
+        // Filter by brand
         if ($brand) {
             $query->where('brand', 'LIKE', "%{$brand}%");
         }
 
-        // Filtrage par prix
+        // Filter by price
         if ($minPrice !== null && is_numeric($minPrice)) {
             $query->where('price', '>=', (float)$minPrice);
         }
@@ -54,7 +54,7 @@ class ProductController extends Controller
             $query->where('price', '<=', (float)$maxPrice);
         }
 
-        // Filtrage par quantité
+        // Filter by quantity
         if ($minQuantity !== null && is_numeric($minQuantity)) {
             $query->where('quantity', '>=', (int)$minQuantity);
         }
@@ -62,13 +62,13 @@ class ProductController extends Controller
             $query->where('quantity', '<=', (int)$maxQuantity);
         }
 
-        // Tri
+        // Sorting
         $query->orderBy($sortBy, $sortOrder);
 
         // Pagination
         $products = $query->paginate($perPage, ['*'], 'page', $page);
 
-        // Récupérer les marques uniques pour les filtres
+        // Get unique brands for filters
         $brands = Product::select('brand')
             ->distinct()
             ->whereNotNull('brand')

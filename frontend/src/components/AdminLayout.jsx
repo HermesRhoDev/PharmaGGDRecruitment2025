@@ -14,7 +14,7 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="dashboard-page admin">
-      {/* Header avec menu de navigation */}
+      {/* Header with navigation menu */}
       <header className="dashboard-header">
         <div className="dashboard-header-content">
           <h1 className="dashboard-title">
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }) {
         </div>
       </header>
 
-      {/* Contenu principal */}
+      {/* Main content area */}
       <main className="dashboard-main">
         {children}
       </main>

@@ -50,7 +50,6 @@
   }
 }
 
-// Stock status styles
 %stock-base {
   font-weight: bold;
 }
@@ -78,7 +77,6 @@
   justify-content: flex-end;
 }
 
-// Buttons
 .btn {
   &-edit {
     @include button-variant($primary-color, $primary-dark);
@@ -89,7 +87,6 @@
   }
 }
 
-// Styles pour les filtres
 .product-filters {
   background-color: $gray-50;
   padding: 20px;
@@ -120,28 +117,24 @@
     min-width: 180px;
     max-width: 280px;
 
-    // Mobile : 1 filtre par ligne
     @include responsive(mobile) {
       min-width: 100%;
       max-width: 100%;
       flex: none;
     }
 
-    // Tablette : 2 filtres par ligne
     @media (min-width: #{$tablet + 1px}) and (max-width: $desktop) {
       min-width: calc(50% - 7.5px);
       max-width: calc(50% - 7.5px);
       flex: none;
     }
 
-    // Desktop moyen : 3 filtres par ligne
     @media (min-width: #{$desktop + 1px}) and (max-width: 1100px) {
       min-width: calc(33.333% - 10px);
       max-width: calc(33.333% - 10px);
       flex: none;
     }
 
-    // Grand desktop : 4-5 filtres par ligne
     @media (min-width: 1101px) {
       min-width: 180px;
       max-width: 280px;
@@ -257,7 +250,6 @@
   }
 }
 
-// Page principale des produits
 .products-page {
   padding: 20px;
   max-width: 1400px;
@@ -268,7 +260,6 @@
   }
 }
 
-// Titre principal
 .products-title {
   margin-bottom: 20px;
 
@@ -288,7 +279,6 @@
   }
 }
 
-// Actions (bouton créer)
 .products-actions {
   margin-bottom: 20px;
   display: flex;
@@ -323,12 +313,10 @@
   }
 }
 
-// Contenu des produits
 .products-content {
   margin-top: 20px;
 }
 
-// Grille des produits avec marges
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -347,7 +335,6 @@
   }
 }
 
-// Carte produit mise à jour
 .product-card {
   background: $white;
   border: 1px solid $gray-300;
@@ -363,7 +350,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
 
-  // Image produit plus petite
   .product-image-small {
     width: 60px;
     height: 60px;
@@ -465,7 +451,6 @@
   }
 }
 
-// États de chargement et d'erreur
 .loading, .error {
   text-align: center;
   padding: 40px 20px;

@@ -1,8 +1,8 @@
 // ======================
-// VARIABLES GLOBALES
+// GLOBAL VARIABLES
 // ======================
 
-// Couleurs principales
+// Colors
 $primary-color: #10a666;
 $secondary-color: #0a7a4b;
 $white: #ffffff;
@@ -10,13 +10,13 @@ $black: #212529;
 $gray: #e4e4e4;
 $red: #e70667;
 
-// Variations de couleurs
+// Color variations
 $primary-light: lighten($primary-color, 10%);
 $primary-dark: darken($primary-color, 10%);
 $secondary-light: lighten($secondary-color, 10%);
 $secondary-dark: darken($secondary-color, 10%);
 
-// Couleurs supplémentaires
+// Additional colors   
 $red-500: #ef4444;
 $red-600: #dc2626;
 $green-500: #10b981;
@@ -26,7 +26,7 @@ $orange-600: #d97706;
 $yellow-500: #facc15;
 $yellow-600: #d9a706;
 
-// Nuances de gris
+// Gray scale variations
 $gray-50: lighten($gray, 15%);
 $gray-100: lighten($gray, 10%);
 $gray-200: $gray;

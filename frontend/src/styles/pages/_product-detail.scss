@@ -7,7 +7,6 @@
   background-color: $gray-50;
 }
 
-// Header (réutilise les styles de products.scss)
 .product-header {
   background-color: $white;
   border-bottom: 1px solid $gray-200;
@@ -73,7 +72,6 @@
   }
 }
 
-// Main content
 .product-main {
   padding: 2rem 0;
   max-width: 1280px;
@@ -92,7 +90,6 @@
   }
 }
 
-// Breadcrumb
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -119,7 +116,6 @@
   }
 }
 
-// Product detail
 .product-detail {
   background-color: $white;
   border-radius: 12px;
@@ -141,7 +137,6 @@
   }
 }
 
-// Product gallery
 .product-gallery {
   .product-image {
     width: 100%;
@@ -166,7 +161,6 @@
   }
 }
 
-// Product info
 .product-info-detail {
   display: flex;
   flex-direction: column;
@@ -249,7 +243,6 @@
       color: $gray-700;
       line-height: 1.6;
 
-      // Styles pour le contenu HTML du WYSIWYG
       h1, h2, h3, h4, h5, h6 {
         margin: 1.5rem 0 1rem 0;
         color: $gray-900;
@@ -359,7 +352,6 @@
   }
 }
 
-// Related products
 .related-products {
   h2 {
     font-size: 1.5rem;
@@ -381,7 +373,6 @@
   }
 }
 
-// Error section
 .error-section {
   display: flex;
   flex-direction: column;
@@ -411,7 +402,6 @@
   }
 }
 
-// Loading section
 .loading-section {
   display: flex;
   flex-direction: column;

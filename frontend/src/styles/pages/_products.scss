@@ -2,7 +2,6 @@
 // PRODUCTS PAGE STYLES
 // ======================
 
-// Base styles
 .products-page {
   min-height: 100vh;
   background-color: $gray-50;
@@ -22,7 +21,6 @@
   }
 }
 
-// Header
 .products-header {
   background-color: $white;
   border-bottom: 1px solid $gray-200;
@@ -74,7 +72,6 @@
   }
 }
 
-// Main content
 .products-main {
   padding: 2rem 0;
 }
@@ -107,7 +104,6 @@
   }
 }
 
-// Search bar
 .search-section {
   display: flex;
   justify-content: center;
@@ -181,7 +177,6 @@
     }
   }
 
-  // Animation pour le spinner
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -211,7 +206,6 @@
   }
 }
 
-// Filters
 .product-filters {
   background-color: $white;
   border: 1px solid $gray-200;
@@ -314,7 +308,6 @@
   }
 }
 
-// Products grid
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -326,7 +319,6 @@
   }
 }
 
-// Product card
 .product-card {
   background-color: $white;
   border: 1px solid $gray-200;
@@ -440,7 +432,6 @@
   }
 }
 
-// Pagination
 .public-pagination {
   display: flex;
   flex-direction: column;
@@ -525,7 +516,6 @@
   }
 }
 
-// Loading and error states
 .loading-section,
 .error-section {
   display: flex;

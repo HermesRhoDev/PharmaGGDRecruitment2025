@@ -30,7 +30,7 @@ Route::prefix('admin/auth')->group(function () {
     Route::get('/roles', [AdminAuthController::class, 'getRoles']);
 });
 
-// Public routes for products (accessible to everyone)
+// Public routes for products
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/{product}', [ProductController::class, 'show']);

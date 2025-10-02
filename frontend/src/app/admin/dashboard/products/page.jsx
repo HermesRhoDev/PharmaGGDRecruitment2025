@@ -18,8 +18,6 @@ export default function ProductsPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  
-  // États pour la pagination et les filtres
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [activeFilters, setActiveFilters] = useState({});
@@ -58,7 +56,6 @@ export default function ProductsPage() {
       const result = await deleteProduct(productId);
       
       if (result.success) {
-        // Recharger la page actuelle après suppression
         await fetchProducts(currentPage, perPage, activeFilters);
         alert("Produit supprimé avec succès !");
       } else {
@@ -82,7 +79,6 @@ export default function ProductsPage() {
       const result = await updateProduct(editingProduct.id, productData);
       
       if (result.success) {
-        // Recharger la page actuelle après modification
         await fetchProducts(currentPage, perPage, activeFilters);
         setEditingProduct(null);
         alert("Produit modifié avec succès !");
@@ -109,9 +105,8 @@ export default function ProductsPage() {
       const result = await createProduct(productData);
       
       if (result.success) {
-        // Recharger la première page après création
         await fetchProducts(1, perPage, activeFilters);
-        setCurrentPage(1); // Retourner à la première page pour voir le nouveau produit
+        setCurrentPage(1);
         setShowCreateForm(false);
         alert("Produit créé avec succès !");
       } else {
@@ -136,28 +131,26 @@ export default function ProductsPage() {
 
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    setCurrentPage(1); // Retourner à la première page
+    setCurrentPage(1);
   };
 
   const handleFiltersChange = (newFilters) => {
     setActiveFilters(newFilters);
-    setCurrentPage(1); // Retourner à la première page lors du changement de filtres
+    setCurrentPage(1);
   };
 
   const handleFiltersReset = () => {
     setActiveFilters({});
-    setCurrentPage(1); // Retourner à la première page lors du reset
+    setCurrentPage(1);
   };
 
   return (
     <AdminLayout>
       <div className="products-page">
-        {/* Titre de la page */}
         <div className="products-title">
           <h1>Gestion des Produits</h1>
         </div>
 
-        {/* Actions principales */}
         <div className="products-actions">
           <button
             onClick={() => setShowCreateForm(true)}
@@ -167,24 +160,20 @@ export default function ProductsPage() {
           </button>
         </div>
 
-        {/* Filtres */}
         <ProductFilters
           filters={filters}
           onFiltersChange={handleFiltersChange}
           onReset={handleFiltersReset}
         />
 
-        {/* États de chargement et d'erreur */}
         {loading && <div className="loading">Chargement des produits...</div>}
         {error && <div className="error">Erreur: {error}</div>}
 
-        {/* Liste des produits */}
         {!loading && !error && (
           <div className="products-content">
             <div className="products-grid">
               {products.map((product) => (
                 <div key={product.id} className="product-card">
-                  {/* Image du produit - plus petite et conditionnelle */}
                   {product.image && (
                     <div className="product-image-small">
                       <img 
@@ -223,7 +212,6 @@ export default function ProductsPage() {
               ))}
             </div>
 
-            {/* Composant de pagination */}
             {pagination && (
               <Pagination
                 pagination={pagination}
@@ -234,7 +222,6 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {/* Formulaire d'édition modal */}
         {editingProduct && (
           <ProductForm
             product={editingProduct}
@@ -245,7 +232,6 @@ export default function ProductsPage() {
           />
         )}
 
-        {/* Formulaire de création modal */}
         {showCreateForm && (
           <ProductForm
             onSave={handleCreateProduct}

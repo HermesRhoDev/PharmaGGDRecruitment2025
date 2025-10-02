@@ -78,7 +78,6 @@
       line-height: 1.6;
       color: $gray-700;
 
-      // Styles pour les éléments de contenu
       h1 {
         font-size: 2em;
         font-weight: bold;
@@ -134,7 +133,6 @@
         text-decoration: underline;
       }
 
-      // Placeholder
       &[data-slate-placeholder] {
         position: relative;
 
@@ -180,12 +178,10 @@
     }
   }
 
-  // États d'erreur
   &.error {
     border-color: $red-600;
   }
 
-  // Responsive
   @include responsive(mobile) {
     .wysiwyg-toolbar {
       padding: 6px 8px;
@@ -211,7 +207,6 @@
   }
 }
 
-// Styles globaux pour l'éditeur
 .wysiwyg-editor * {
   box-sizing: border-box;
 }

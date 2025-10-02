@@ -50,7 +50,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
       description: value
     }));
     
-    // Effacer l'erreur pour la description
+    // Erase error for description
     if (errors.description) {
       setErrors(prev => ({
         ...prev,
@@ -63,7 +63,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
     const file = e.target.files[0];
     setSelectedImage(file);
     
-    // Effacer l'erreur pour l'image
+    // Erase error for image
     if (errors.image) {
       setErrors(prev => ({
         ...prev,
@@ -97,14 +97,14 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
       newErrors.quantity = "La quantité doit être positive ou nulle";
     }
 
-    // Validation de l'image
+    // Image validation
     if (selectedImage) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
       if (!allowedTypes.includes(selectedImage.type)) {
         newErrors.image = "L'image doit être au format JPEG, PNG, JPG, GIF ou WebP";
       }
       
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const maxSize = 2 * 1024 * 1024; // 2MB / 2MO
       if (selectedImage.size > maxSize) {
         newErrors.image = "L'image ne peut pas dépasser 2 Mo";
       }
@@ -125,7 +125,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('price', parseFloat(formData.price));
-      formDataToSend.append('reference', formData.reference); // Envoi comme string
+      formDataToSend.append('reference', formData.reference);
       formDataToSend.append('brand', formData.brand);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('quantity', parseInt(formData.quantity));
@@ -150,7 +150,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
       
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-          {/* Nom */}
+          {/* Name */}
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Nom du produit *
@@ -173,7 +173,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
             )}
           </div>
 
-          {/* Prix */}
+          {/* Price */}
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Prix (€) *
@@ -197,7 +197,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
             )}
           </div>
 
-          {/* Référence */}
+          {/* Reference */}
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Référence *
@@ -221,7 +221,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
             )}
           </div>
 
-          {/* Marque */}
+          {/* Brand */}
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Marque *
@@ -244,7 +244,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
             )}
           </div>
 
-          {/* Quantité */}
+          {/* Quantity */}
           <div style={{ marginBottom: "20px" }}>
             <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
               Quantité en stock *
@@ -305,7 +305,7 @@ const EditProductForm = ({ product, onSubmit, onCancel, isLoading = false }) => 
           </div>
         </div>
 
-        {/* Description WYSIWYG */}
+        {/* WYSIWYG */}
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "10px", fontWeight: "bold" }}>
             Description du produit

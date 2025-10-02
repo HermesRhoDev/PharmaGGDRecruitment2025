@@ -1,0 +1,84 @@
+// ======================
+// ADMIN PAGINATION STYLES
+// ======================
+
+.admin-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: $gray-100;
+  border-radius: 5px;
+
+  &__info {
+    font-size: 14px;
+    color: $gray-600;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__per-page {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .per-page-label {
+      font-size: 14px;
+      color: $gray-800;
+    }
+
+    .per-page-select {
+      padding: 4px 8px;
+      border: 1px solid $gray-300;
+      border-radius: 4px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.15);
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 5px;
+
+    .admin-pagination__button {
+      @include button-base;
+      padding: 6px 12px;
+      border: 1px solid $gray-300;
+      background-color: $white;
+      color: $primary-color;
+      border-radius: 4px;
+      font-size: 14px;
+
+      &:hover:not(:disabled) {
+        background-color: $gray-50;
+        border-color: $gray-400;
+      }
+
+      &.is-active {
+        @include button-variant($primary-color, $primary-dark);
+        border-color: transparent;
+        font-weight: bold;
+      }
+
+      &.is-disabled {
+        cursor: not-allowed;
+        color: $gray-600;
+        background-color: $gray-100;
+      }
+
+      &--nav {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}

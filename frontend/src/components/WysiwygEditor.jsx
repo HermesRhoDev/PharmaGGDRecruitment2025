@@ -5,11 +5,11 @@ import { createEditor, Transforms, Editor, Text, Element as SlateElement } from 
 import { Slate, Editable, withReact, useSlate } from 'slate-react';
 import { withHistory } from 'slate-history';
 
-// Définition des types de blocs
+// Types of blocks
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
 
-// Valeur par défaut pour l'éditeur
+// Default value for the editor
 const DEFAULT_VALUE = [
   {
     type: 'paragraph',
@@ -17,7 +17,7 @@ const DEFAULT_VALUE = [
   },
 ];
 
-// Fonction pour parser la valeur d'entrée
+// Function to parse the input value
 const parseValue = (value) => {
   if (!value) return DEFAULT_VALUE;
   
@@ -25,7 +25,7 @@ const parseValue = (value) => {
     try {
       const parsed = JSON.parse(value);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Vérifier que chaque élément a la structure correcte
+        // Check that each element has the correct structure
         const isValid = parsed.every(node => 
           node && typeof node === 'object' && 
           node.children && Array.isArray(node.children)
@@ -33,7 +33,7 @@ const parseValue = (value) => {
         return isValid ? parsed : DEFAULT_VALUE;
       }
     } catch {
-      // Si ce n'est pas du JSON valide, créer un paragraphe avec le texte
+      // If it's not valid JSON, create a paragraph with the text
       return [
         {
           type: 'paragraph',
@@ -46,7 +46,7 @@ const parseValue = (value) => {
   return DEFAULT_VALUE;
 };
 
-// Composant pour les boutons de la barre d'outils
+// Component for the toolbar buttons
 const Button = ({ active, onMouseDown, children, ...props }) => (
   <button
     {...props}
@@ -58,10 +58,10 @@ const Button = ({ active, onMouseDown, children, ...props }) => (
   </button>
 );
 
-// Composant pour les icônes
+// Component for the icons
 const Icon = ({ children }) => <span className="wysiwyg-icon">{children}</span>;
 
-// Boutons de formatage
+// Formatting buttons
 const MarkButton = ({ format, icon }) => {
   const editor = useSlate();
   return (
@@ -96,7 +96,7 @@ const BlockButton = ({ format, icon }) => {
   );
 };
 
-// Barre d'outils
+// Toolbar component
 const Toolbar = () => (
   <div className="wysiwyg-toolbar">
     <MarkButton format="bold" icon="B" />
@@ -115,7 +115,7 @@ const Toolbar = () => (
   </div>
 );
 
-// Fonctions utilitaires
+// Utility functions
 const isMarkActive = (editor, format) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;
@@ -182,7 +182,7 @@ const toggleBlock = (editor, format) => {
   }
 };
 
-// Composants de rendu
+// Render components
 const Element = ({ attributes, children, element }) => {
   const style = { textAlign: element.align };
   switch (element.type) {
@@ -241,7 +241,7 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-// Composant principal
+// Main component
 const WysiwygEditor = ({ 
   value = '', 
   onChange, 
@@ -249,16 +249,16 @@ const WysiwygEditor = ({
   maxLength = 50000,
   error = null 
 }) => {
-  // Créer l'éditeur une seule fois
+  // Create the editor instance once
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   
-  // Parser la valeur initiale une seule fois
+  // Parse the initial value once
   const initialValue = useMemo(() => parseValue(value), []);
   
-  // État pour suivre la valeur actuelle
+  // State to track the current value
   const [currentValue, setCurrentValue] = useState(initialValue);
 
-  // Synchroniser avec la valeur externe seulement si elle change vraiment
+  // Synchronize with the external value only if it actually changes
   useEffect(() => {
     const newValue = parseValue(value);
     const currentSerialized = JSON.stringify(currentValue);
@@ -277,12 +277,12 @@ const WysiwygEditor = ({
   const handleChange = useCallback((newValue) => {
     setCurrentValue(newValue);
     
-    // Convertir en JSON pour le stockage
+    // Convert to JSON string before calling onChange
     const serialized = JSON.stringify(newValue);
     onChange?.(serialized);
   }, [onChange]);
 
-  // Calculer le nombre de caractères
+  // Calculate the text length
   const getTextLength = (nodes) => {
     return nodes.reduce((length, node) => {
       if (Text.isText(node)) {

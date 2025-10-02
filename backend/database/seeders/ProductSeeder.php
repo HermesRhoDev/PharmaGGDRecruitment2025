@@ -13,7 +13,6 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $products = [
-            // Antalgiques et Anti-inflammatoires
             [
                 'name' => 'Paracétamol 500mg',
                 'price' => 3.50,
@@ -70,8 +69,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 70,
                 'image' => null,
             ],
-
-            // Antibiotiques
             [
                 'name' => 'Amoxicilline 1g',
                 'price' => 8.75,
@@ -112,8 +109,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 30,
                 'image' => null,
             ],
-
-            // Gastro-entérologie
             [
                 'name' => 'Oméprazole 20mg',
                 'price' => 6.30,
@@ -154,8 +149,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 100,
                 'image' => null,
             ],
-
-            // Antihistaminiques
             [
                 'name' => 'Cetirizine 10mg',
                 'price' => 5.15,
@@ -188,8 +181,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 55,
                 'image' => null,
             ],
-
-            // Cardiovasculaire
             [
                 'name' => 'Simvastatine 20mg',
                 'price' => 12.40,
@@ -230,8 +221,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 80,
                 'image' => null,
             ],
-
-            // Diabète
             [
                 'name' => 'Metformine 850mg',
                 'price' => 7.90,
@@ -256,8 +245,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 75,
                 'image' => null,
             ],
-
-            // Thyroïde
             [
                 'name' => 'Levothyroxine 75µg',
                 'price' => 9.25,
@@ -282,8 +269,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 70,
                 'image' => null,
             ],
-
-            // Vitamines et Compléments
             [
                 'name' => 'Vitamine D3 1000UI',
                 'price' => 12.80,
@@ -324,8 +309,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 110,
                 'image' => null,
             ],
-
-            // Dermatologie
             [
                 'name' => 'Crème Hydrocortisone 1%',
                 'price' => 7.50,
@@ -350,8 +333,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 45,
                 'image' => null,
             ],
-
-            // Respiratoire
             [
                 'name' => 'Salbutamol 100µg',
                 'price' => 14.20,
@@ -376,8 +357,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 55,
                 'image' => null,
             ],
-
-            // Neurologie/Psychiatrie
             [
                 'name' => 'Sertraline 50mg',
                 'price' => 13.90,
@@ -410,8 +389,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 35,
                 'image' => null,
             ],
-
-            // Ophtalmologie
             [
                 'name' => 'Collyre Timolol 0.5%',
                 'price' => 12.50,
@@ -428,8 +405,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 20,
                 'image' => null,
             ],
-
-            // Gynécologie
             [
                 'name' => 'Pilule Ethinylestradiol/Levonorgestrel',
                 'price' => 9.80,
@@ -446,8 +421,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 60,
                 'image' => null,
             ],
-
-            // Urologie
             [
                 'name' => 'Tamsulosine 0.4mg',
                 'price' => 14.60,
@@ -464,8 +437,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 40,
                 'image' => null,
             ],
-
-            // Pédiatrie
             [
                 'name' => 'Paracétamol Sirop 120mg/5ml',
                 'price' => 4.90,
@@ -482,8 +453,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 120,
                 'image' => null,
             ],
-
-            // Homéopathie
             [
                 'name' => 'Oscillococcinum 200K',
                 'price' => 8.90,
@@ -500,8 +469,6 @@ class ProductSeeder extends Seeder
                 'quantity' => 180,
                 'image' => null,
             ],
-
-            // Produits de parapharmacie
             [
                 'name' => 'Sérum Physiologique 30x5ml',
                 'price' => 2.80,

@@ -14,7 +14,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
     max_quantity: ''
   });
 
-  // Fonction pour s'assurer que les valeurs sont toujours des chaînes
+  // Function to ensure that values are always strings
   const ensureStringValue = (value) => {
     if (value === null || value === undefined) {
       return '';
@@ -22,7 +22,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
     return String(value);
   };
 
-  // Mettre à jour les filtres locaux quand les filtres appliqués changent
+  // Update local filters when applied filters change
   useEffect(() => {
     if (filters?.applied_filters) {
       const safeFilters = {};
@@ -45,7 +45,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
   };
 
   const handleApplyFilters = () => {
-    // Nettoyer les valeurs vides
+    // Clean empty values
     const cleanFilters = Object.entries(localFilters).reduce((acc, [key, value]) => {
       const cleanValue = ensureStringValue(value);
       if (cleanValue !== '') {
@@ -83,7 +83,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
       <h3 className="product-filters__title">Filtres et Recherche</h3>
       
       <div className="product-filters__grid">
-        {/* Recherche textuelle */}
+        {/* Search */}
         <div className="product-filters__field">
           <label className="product-filters__label">
             Recherche (nom, marque, référence)
@@ -98,7 +98,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
           />
         </div>
 
-        {/* Filtrage par marque */}
+        {/* Brand Filter */}
         <div className="product-filters__field">
           <label className="product-filters__label">
             Marque
@@ -115,7 +115,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
           </select>
         </div>
 
-        {/* Tri */}
+        {/* Sort by */}
         <div className="product-filters__field">
           <label className="product-filters__label">
             Trier par
@@ -144,7 +144,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
           </div>
         </div>
 
-        {/* Plage de prix */}
+        {/* Price Range */}
         <div className="product-filters__field">
           <label className="product-filters__label">
             Prix (€)
@@ -168,7 +168,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
           </div>
         </div>
 
-        {/* Plage de stock */}
+        {/* Quantity Range */}
         <div className="product-filters__field">
           <label className="product-filters__label">
             Stock
@@ -191,7 +191,7 @@ export default function ProductFilters({ filters, onFiltersChange, onReset }) {
         </div>
       </div>
 
-      {/* Boutons d'action */}
+      {/* Action Buttons */}
       <div className="product-filters__actions">
         <button
           onClick={handleApplyFilters}

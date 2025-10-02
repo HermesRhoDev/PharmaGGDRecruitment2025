@@ -20,7 +20,7 @@ export default function SearchBar({
       if (searchTerm !== initialValue) {
         setIsSearching(true);
         onSearch(searchTerm);
-        // Simuler un petit délai pour l'indicateur de chargement
+        // Simulate a short delay to show the loading indicator
         setTimeout(() => setIsSearching(false), 200);
       }
     }, debounceMs);
@@ -28,7 +28,7 @@ export default function SearchBar({
     return () => clearTimeout(timeoutId);
   }, [searchTerm, onSearch, debounceMs, enableLiveSearch, initialValue]);
 
-  // Synchroniser avec la valeur initiale
+  // Synchronize with the initial value
   useEffect(() => {
     setSearchTerm(initialValue);
   }, [initialValue]);
@@ -49,10 +49,10 @@ export default function SearchBar({
     const value = e.target.value;
     setSearchTerm(value);
     
-    // Si la recherche en direct est désactivée, ne pas déclencher automatiquement
+    // If live search is disabled, don't trigger automatically
     if (!enableLiveSearch) return;
     
-    // Si l'utilisateur efface complètement, rechercher immédiatement
+    // If the user clears the search, search immediately
     if (value === "") {
       onSearch("");
       setIsSearching(false);
@@ -72,7 +72,7 @@ export default function SearchBar({
           className="search-input"
         />
         
-        {/* Indicateur de recherche en cours */}
+        {/* Search loading indicator */}
         {isSearching && enableLiveSearch && (
           <div className="search-loading-indicator">
             <svg 
@@ -109,7 +109,7 @@ export default function SearchBar({
           </div>
         )}
         
-        {/* Bouton d'effacement */}
+        {/* Clear search button */}
         {searchTerm && !isSearching && (
           <button
             type="button"
@@ -122,7 +122,7 @@ export default function SearchBar({
         )}
       </div>
       
-      {/* Bouton de recherche - optionnel si recherche en direct activée */}
+      {/* Search button - optional if live search is disabled */}
       {!enableLiveSearch && (
         <button type="submit" className="search-button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

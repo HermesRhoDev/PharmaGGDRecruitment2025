@@ -6,7 +6,7 @@ export async function getPublicProducts(page = 1, perPage = 12, filters = {}) {
         url.searchParams.append('page', page.toString())
         url.searchParams.append('per_page', perPage.toString())
         
-        // Ajouter les filtres à l'URL
+        // Add filters to URL
         Object.entries(filters).forEach(([key, value]) => {
             if (value !== null && value !== undefined && value !== '') {
                 url.searchParams.append(key, value.toString())
@@ -17,7 +17,7 @@ export async function getPublicProducts(page = 1, perPage = 12, filters = {}) {
             headers: {
                 Accept: "application/json",
             },
-            cache: 'no-store' // Pour éviter le cache côté serveur
+            cache: 'no-store'
         })
 
         if (!response.ok) {

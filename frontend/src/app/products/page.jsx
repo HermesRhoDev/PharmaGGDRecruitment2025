@@ -11,20 +11,20 @@ import { useProductFiltersState } from "App/lib/useUrlState";
 import { usePaginationState } from "App/lib/usePaginationState";
 
 export default function ProductsPage() {
-  // État persistant dans l'URL
+  // Persistent state in URL
   const [urlState, updateUrlState, resetUrlState] = useProductFiltersState();
   
-  // Gestion de la pagination
+  // Pagination management
   const pagination = usePaginationState(urlState, updateUrlState);
   
-  // État local pour les données
+  // Local state for data
   const [products, setProducts] = useState([]);
   const [paginationData, setPaginationData] = useState({});
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Extraction des filtres pour l'API (sans page et per_page) - MEMOIZED
+  // Extract filters for API call (excluding page and per_page) - MEMOIZED
   const apiFilters = useMemo(() => ({
     search: urlState.search,
     brand: urlState.brand,
@@ -71,7 +71,7 @@ export default function ProductsPage() {
     loadProducts();
   }, [loadProducts]);
 
-  // Handlers pour les composants enfants - MEMOIZED
+  // Handlers for child components - MEMOIZED
   const handleSearch = useCallback((search) => {
     updateUrlState({ search, page: 1 });
   }, [updateUrlState]);
@@ -106,7 +106,7 @@ export default function ProductsPage() {
               <p>Découvrez notre gamme complète de produits pharmaceutiques</p>
             </div>
 
-            {/* Barre de recherche */}
+            {/* Search Bar */}
             <div className="search-section">
               <SearchBar
                 onSearch={handleSearch}
@@ -117,14 +117,14 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Filtres */}
+            {/* Filters */}
             <ProductFilters
               filters={filters}
               onFiltersChange={handleFiltersChange}
               appliedFilters={apiFilters}
             />
 
-            {/* Résultats */}
+            {/* Results */}
             {loading ? (
               <div className="loading-section">
                 <div className="loading-spinner"></div>

@@ -96,7 +96,7 @@ class UpdateProductRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Supprimer les champs vides pour permettre les mises à jour partielles
+        // Delete empty fields to allow partial updates
         $this->merge(array_filter($this->all(), function ($value) {
             return $value !== null && $value !== '';
         }));

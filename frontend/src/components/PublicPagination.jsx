@@ -36,7 +36,7 @@ export default function PublicPagination({ pagination, onPageChange, onPerPageCh
       </div>
 
       <div className="pagination-controls">
-        {/* Bouton précédent */}
+        {/* Previous page button */}
         <button
           onClick={() => onPageChange(current_page - 1)}
           disabled={current_page === 1}
@@ -46,7 +46,7 @@ export default function PublicPagination({ pagination, onPageChange, onPerPageCh
           ‹
         </button>
 
-        {/* Première page */}
+        {/* First page button */} 
         {pages[0] > 1 && (
           <>
             <button
@@ -59,7 +59,7 @@ export default function PublicPagination({ pagination, onPageChange, onPerPageCh
           </>
         )}
 
-        {/* Pages visibles */}
+        {/* Visible page buttons */}
         {pages.map((page) => (
           <button
             key={page}
@@ -70,7 +70,7 @@ export default function PublicPagination({ pagination, onPageChange, onPerPageCh
           </button>
         ))}
 
-        {/* Dernière page */}
+        {/* Last page button */}
         {pages[pages.length - 1] < last_page && (
           <>
             {pages[pages.length - 1] < last_page - 1 && (
@@ -85,7 +85,7 @@ export default function PublicPagination({ pagination, onPageChange, onPerPageCh
           </>
         )}
 
-        {/* Bouton suivant */}
+        {/* Next page button */}
         <button
           onClick={() => onPageChange(current_page + 1)}
           disabled={current_page === last_page}

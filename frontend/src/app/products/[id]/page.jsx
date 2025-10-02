@@ -25,13 +25,13 @@ export default function ProductDetailPage() {
       setError("");
 
       try {
-        // Charger le produit
+        // Load product details
         const productResult = await getPublicProduct(productId);
 
         if (productResult.success) {
           setProduct(productResult.data);
 
-          // Charger les produits similaires
+          // Load related products
           const relatedResult = await getRelatedProducts(productId);
           if (relatedResult.success) {
             setRelatedProducts(relatedResult.data);
@@ -59,22 +59,17 @@ export default function ProductDetailPage() {
     }).format(price);
   };
 
-  const stripHtml = (html) => {
-    if (!html) return "";
-    return html.replace(/<[^>]*>/g, "");
-  };
-
-  // Fonction pour convertir la structure Slate.js en HTML
+  // Convert Slate.js data to HTML
   const convertSlateToHtml = (slateData) => {
     if (!slateData) return "";
 
     try {
-      // Si c'est déjà du HTML, le retourner tel quel
+      // If already HTML, return as is
       if (typeof slateData === "string" && slateData.includes("<")) {
         return slateData;
       }
 
-      // Si c'est une string JSON, la parser
+      // If JSON string, parse it
       const data =
         typeof slateData === "string" ? JSON.parse(slateData) : slateData;
 
@@ -83,7 +78,7 @@ export default function ProductDetailPage() {
       return data.map((node) => convertNodeToHtml(node)).join("");
     } catch (error) {
       console.error("Erreur lors de la conversion Slate:", error);
-      return slateData; // Retourner la donnée brute en cas d'erreur
+      return slateData;
     }
   };
 
@@ -92,7 +87,7 @@ export default function ProductDetailPage() {
 
     const { type, children } = node;
 
-    // Convertir le contenu des enfants
+    // Convert children content
     const content = children
       ? children
           .map((child) => {
@@ -108,7 +103,7 @@ export default function ProductDetailPage() {
           .join("")
       : "";
 
-    // Convertir selon le type de nœud
+    // Convert based on node type
     switch (type) {
       case "paragraph":
         return `<p>${content}</p>`;
